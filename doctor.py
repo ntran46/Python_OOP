@@ -6,10 +6,10 @@ class Doctor(Person):
 
     PERSON_TYPE = 'Doctor'
 
-    def __init__(self, first_name: str, last_name: str, date_of_birth: str, address: str, id: int, office_num: int,
+    def __init__(self, first_name: str, last_name: str, date_of_birth: str, address: str, id: int, is_released: bool, office_num: int,
                  income: int):
         """Initialize a constructor of a Doctor object"""
-        super().__init__(first_name, last_name, date_of_birth, address, id)
+        super().__init__(first_name, last_name, date_of_birth, address, id, is_released)
         # self.validate_attributes([office_num, income], (int))
         self._office_num = office_num
         self._income = income
