@@ -6,16 +6,15 @@ class Patient(Person):
 
     PERSON_TYPE = 'Patient'
 
-    def __init__(self, first_name: str, last_name: str, date_of_birth: str, address: str, room_num: int,
+    def __init__(self, first_name: str, last_name: str, date_of_birth: str, address: str, id: int, room_num: int,
                  bill=0.0):
         """Initialize a constructor of a Patient object"""
-        super().__init__(first_name, last_name, date_of_birth, address)
-        self.validate_attributes([room_num, bill], (int, float))
+        super().__init__(first_name, last_name, date_of_birth, address, id)
+        # self.validate_attributes([room_num, bill], (int, float))
         self._room_num = room_num
         self._bill = bill
         self._status = False
         self._is_released = False
-        self._id = 0
         self._is_released = False
 
     @property
@@ -38,10 +37,10 @@ class Patient(Person):
         """Function to get the description of a Patient object"""
         if self._is_released:
             return f"The patient {self._firstName} {self._lastName}, ID number {self._id}, "\
-               f"born in {self._date_of_birth}, is recovered. The total bill is ${self._bill:,}. "
+               f"born in {self._date_of_birth:%Y-%m-%d}, is recovered. The total bill is ${self._bill:,}. "
         else:
             return f"The patient {self._firstName} {self._lastName}, ID number {self._id}, "\
-               f"born in {self._date_of_birth}, is being treated in the room {self._room_num}."
+               f"born in {self._date_of_birth:%Y-%m-%d}, is being treated in the room {self._room_num}."
 
     def get_type(self):
         """Function to get the type of a Patient object"""

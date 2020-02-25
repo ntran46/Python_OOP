@@ -1,29 +1,31 @@
-from abc import *
+from abc import abstractmethod
+from datetime import datetime
 
 
 class Person:
     """Define a Person class"""
 
-    def __init__(self, first_name: str, last_name: str, date_of_birth: str, address: str):
+    def __init__(self, first_name: str, last_name: str, date_of_birth: str, address: str, id: int, is_released: bool):
         """Initialize a constructor of a Person instance"""
-        self.validate_attributes([first_name, last_name, address, date_of_birth], (str,))
-        self._id = 0
+        self.validation(first_name, last_name, address, id)
+        self._id = id
         self._firstName = first_name
         self._lastName = last_name
-        self._date_of_birth = date_of_birth
+        self._date_of_birth = datetime.strptime(date_of_birth, "%Y-%m-%d")
         self._address = address
         self._status = False
-        self._is_released = False
+        self._is_released = is_released
 
-    @property
     def is_released(self):
         """Function to get the status of a Person object"""
         return self._is_released
 
-    def set_id(self, id):
-        """Function to set the ID of a Person object"""
-        self.validate_attributes([id], (int,))
-        self._id = id
+    # def set_id(self, id: int):
+    #     """Function to set the ID of a Person object"""
+    #     if id is not int:
+    #         raise TypeError("Id should be an integer.")
+    #     else:
+    #         self._id = id
 
     def get_id(self):
         """Function to get the ID of a Person object"""
@@ -37,7 +39,7 @@ class Person:
         """Function to get the last name of a Person object"""
         return self._lastName
 
-    def get_date_of_birth(self):
+    def get_date_of_birth(self) -> datetime:
         """Function to get the DOB of a Person object"""
         return self._date_of_birth
 
@@ -55,9 +57,16 @@ class Person:
         """Abstract method to print a type of the Person object"""
         raise NotImplementedError("This is an abstract method")
 
-    @staticmethod
-    def validate_attributes(val: list, type_check):
+    @classmethod
+    def validation(cls, first_name: str, last_name: str, address: str, id: int):
         """Function to validate type of all parameters"""
-        for element in val:
-            if type(element) not in type_check:
-                raise TypeError("Invalid Type value for the attribute")
+        if type(first_name) is not str:
+            raise TypeError("First Name should be string.")
+        if type(last_name) is not str:
+            raise TypeError("Last Name should be string.")
+        if type(address) is not str:
+            raise TypeError("Address should be string.")
+        if type(id) is not int:
+            raise TypeError("Id should be integer.")
+        if id <= 0:
+            raise ValueError("Id should be more than 0.")

@@ -4,8 +4,9 @@ from accounting_stats import AccountingStats
 class Department:
     """Define a Department class"""
 
-    def __init__(self, name: str, department: str):
+    def __init__(self, name: str):
         """Initialize a constructor of a Department instance"""
+        self.validation(name)
         self._name = name
         self._department = []
 
@@ -18,15 +19,14 @@ class Department:
         for obj in self._department:
             if obj.get_id == id:
                 self._department.remove(obj)
-            break
 
-    def get_person_by_id(self, person: object):
+    def get_person_by_id(self, id: str):
         """Function to get an ID of a person in the list"""
         for obj in self._department:
             if obj.get_id == id:
                 return obj
 
-    def person_exist(self, person: object):
+    def person_exist(self, id: str):
         """Function to check if a person belongs to the department"""
         for obj in self._department:
             if obj.get_id == id:
@@ -51,3 +51,8 @@ class Department:
             else:
                 _remaining_num += 1
         return AccountingStats(_released_num, _remaining_num, _total_bill_each_patient)
+
+    @classmethod
+    def validation(cls, name: str):
+        if type(name) is not str:
+            raise TypeError("Name of the department should be a string.")
