@@ -1,4 +1,4 @@
-from accounting_stats import *
+from accounting_stats import AccountingStats
 
 
 class Department:

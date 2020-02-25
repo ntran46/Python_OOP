@@ -1,6 +1,6 @@
 from department import *
-from doctor import *
-from patient import *
+from doctor import Doctor
+from patient import Patient
 
 
 if __name__ == "__main__":
