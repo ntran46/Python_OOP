@@ -48,9 +48,9 @@ class Department:
 
         for obj in self._department:
             if obj.get_type() == 'Patient':
-                if obj.is_released:
+                if obj.is_released():
                     _released_num += 1
-                    _total_bill_released_patients += obj.get_bill_amount()
+                    _total_bill_released_patients += obj.bill
                 else:
                     _remaining_num += 1
         return AccountingStats(_released_num, _remaining_num, _total_bill_released_patients)
