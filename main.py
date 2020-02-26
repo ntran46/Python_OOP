@@ -45,6 +45,7 @@ if __name__ == "__main__":
     department1.add_person(patient3)
     department1.add_person(patient4)
     department1.add_person(patient5)
+    department1.remove_person_by_id(patient5.get_id())
 
     print_report(department1)
 

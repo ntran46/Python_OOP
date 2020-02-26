@@ -19,20 +19,22 @@ class Department:
     def remove_person_by_id(self, id: int):
         """Function to remove a person out of a department list"""
         for obj in self._department:
-            if obj.get_id == id:
+            if obj.get_id() == id:
                 self._department.remove(obj)
 
     def get_person_by_id(self, id: int):
         """Function to get an ID of a person in the list"""
         for obj in self._department:
-            if obj.get_id == id:
+            if obj.get_id() == id:
                 return obj
 
     def person_exist(self, id: int):
         """Function to check if a person belongs to the department"""
         for obj in self._department:
-            if obj.get_id == id:
-                return obj.is_released()
+            if obj.get_id() == id:
+                return True
+            else:
+                return False
 
     def get_name(self):
         """Function to get name of a department"""
@@ -45,11 +47,12 @@ class Department:
         _total_bill_released_patients = 0
 
         for obj in self._department:
-            if (obj.is_released == True) and (obj.get_type() == 'Patient'):
-                _released_num += 1
-                _total_bill_released_patients += obj.get_bill_amount()
-            else:
-                _remaining_num += 1
+            if obj.get_type() == 'Patient':
+                if obj.is_released:
+                    _released_num += 1
+                    _total_bill_released_patients += obj.get_bill_amount()
+                else:
+                    _remaining_num += 1
         return AccountingStats(_released_num, _remaining_num, _total_bill_released_patients)
 
     @staticmethod
