@@ -18,14 +18,13 @@ class TestAccountingStats(TestCase):
     def test_invalid_constructor(self):
         """Test an object with invalid parameters"""
         with self.assertRaises(ValueError):
-            stats_4 = AccountingStats(0, 100, 200000)
-            stats_1 = AccountingStats("5", 100, 150000)
+            stats_4 = AccountingStats(-1, 100, 200000)
 
         with self.assertRaises(TypeError):
             stats_1 = AccountingStats("5", 100, 150000)
 
         with self.assertRaises(ValueError):
-            stats_5 = AccountingStats(5, 0, 200000)
+            stats_5 = AccountingStats(5, -1, 200000)
 
         with self.assertRaises(TypeError):
             stats_2 = AccountingStats(5, "100", 150000)

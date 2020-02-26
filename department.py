@@ -35,6 +35,25 @@ class Department:
         if not check:
             raise ValueError(f"The id {id} does not exist.")
 
+    def get_person_by_type(self, person_type: str):
+        """Function is to give a description all people with a given type"""
+        type_flat = 0
+        if type(person_type) is not str:
+            raise TypeError("The type input is not a string")
+
+        for person in self._department:
+            if person.get_type() == person_type:
+                person.get_description()
+                type_flat += 1
+
+        if type_flat == 0:
+            return f"There is no type \"{person_type}\" of person in the department {self._name}."
+
+    def get_all_current_people(self):
+        """Function is return all people in a department"""
+        for person in self._department:
+            person.get_description()
+
     def person_exist(self, id: int):
         """Function to check if a person belongs to the department"""
         for obj in self._department:

@@ -62,7 +62,19 @@ class TestDepartment(TestCase):
         test_id_1 = self.doctor2.get_id()
         self.assertEqual(self.department.person_exist(test_id_1), True)
 
+    def test_get_person_by_type(self):
+        """Test to get all people with a given type"""
+        with self.assertRaises(TypeError):
+            self.department.get_person_by_type(1)
 
+        return_text = "There is no type \"Teacher\" of person in the department Emergency."
+        self.assertEqual(self.department.get_person_by_type("Teacher"), return_text)
+
+        self.department.get_person_by_type("Patient")
+
+    def test_get_all_people(self):
+        """Test to get all people in a department"""
+        self.department.get_all_current_people()
 
     def test_get_existing_person(self):
         """Test to get an object (person) from the department"""
