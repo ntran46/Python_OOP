@@ -23,35 +23,22 @@ class TestDoctor(TestCase):
             patient_2 = Patient("Uy", "Tran", "1990-11-20", "1111 Columbia, New Westminster, BC",
                                2, True, 0, 200000)
 
-        with self.assertRaises(TypeError):
-            patient_3 = Patient("Uy", "Tran", "1990-11-20", "1111 Columbia, New Westminster, BC",
-                               2, True, 300, "200000")
-
-        with self.assertRaises(ValueError):
-            patient_4 = Patient("Uy", "Tran", "1990-11-20", "1111 Columbia, New Westminster, BC",
-                               2, True, 300, 400000)
-
     def test_is_released(self):
         """Checks if the selling status returns a valid value. (True or False)"""
         self.assertEqual(self.patient.is_released(), True)
         self.assertTrue(self.patient.is_released())
         self.assertIsNotNone(self.patient.is_released())
 
-    def test_get_bill(self):
+    def test_bill(self):
         """This checks if the get_address() method works as it should."""
-        self.assertEqual(self.patient.get_bill(), 200000)
-        self.assertIsNotNone(self.patient.get_bill())
+        self.assertEqual(self.patient.bill, 200000)
+        self.assertIsNotNone(self.patient.bill)
 
     def test_set_bill(self):
         """Checks if we can set the asked price correctly."""
         self.patient.set_bill(200000)
-        self.assertEqual(self.patient.get_bill(), 200000)
-        self.assertIsNotNone(self.patient.get_bill())
-        with self.assertRaises(TypeError):
-            self.patient.set_bill("200000")
-
-        with self.assertRaises(ValueError):
-            self.patient.set_bill(800000)
+        self.assertEqual(self.patient.bill, 200000)
+        self.assertIsNotNone(self.patient.bill)
 
     def test_get_type(self):
         """This method ensures that we coded correctly for get_type() method."""

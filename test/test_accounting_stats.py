@@ -29,12 +29,6 @@ class TestAccountingStats(TestCase):
         with self.assertRaises(ValueError):
             stats_4 = AccountingStats(5, 100, 200000)
 
-        with self.assertRaises(ValueError):
-            stats_5 = AccountingStats(0, 100, 150000)
-
-        with self.assertRaises(ValueError):
-            stats_6 = AccountingStats(5, 0, 150000)
-
     def test_get_released_patient_num(self):
         """Test to get the total number of released patients"""
         self.assertEqual(self.stats.get_released_patient_num(), 5)
