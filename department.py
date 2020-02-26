@@ -36,7 +36,7 @@ class Department:
 
     def get_name(self):
         """Function to get name of a department"""
-        return self._department
+        return self._name
 
     def get_statistics(self):
         """Function to get statistics information from all patients"""
@@ -45,9 +45,9 @@ class Department:
         _total_bill_released_patients = 0
 
         for obj in self._department:
-            if obj.is_released:
+            if (obj.is_released == True) and (obj.get_type() == 'Patient'):
                 _released_num += 1
-                _total_bill_released_patients += obj.get_bill_amount
+                _total_bill_released_patients += obj.get_bill_amount()
             else:
                 _remaining_num += 1
         return AccountingStats(_released_num, _remaining_num, _total_bill_released_patients)
