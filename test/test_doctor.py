@@ -52,7 +52,7 @@ class TestDoctor(TestCase):
         self.assertEqual(self.doctor.PERSON_TYPE, 'Doctor')
         self.assertIsNotNone(self.doctor.get_type())
 
-    def test_display_description(self):
+    def test_get_description(self):
         """This one ensures that this method works correctly."""
         self.assertEqual(self.doctor.get_description(), None)
 
