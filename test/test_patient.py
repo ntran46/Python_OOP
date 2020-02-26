@@ -36,7 +36,7 @@ class TestDoctor(TestCase):
 
     def test_set_bill(self):
         """Checks if we can set the asked price correctly."""
-        self.patient.set_bill(200000)
+        self.patient.bill= 200000
         self.assertEqual(self.patient.bill, 200000)
         self.assertIsNotNone(self.patient.bill)
 
@@ -61,5 +61,5 @@ class TestDoctor(TestCase):
 
     def test_get_bill_amount(self):
         """Checks that the commission value is correct."""
-        self.assertEqual(self.patient.get_bill_amount(), 200000)
-        self.assertIsNotNone(self.patient.get_bill_amount())
+        self.assertEqual(self.patient.bill, 200000)
+        self.assertIsNotNone(self.patient.bill)
