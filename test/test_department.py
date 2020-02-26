@@ -1,7 +1,8 @@
 from unittest import *
 from patient import *
 from doctor import *
-from department import  *
+from department import *
+
 
 class TestDepartment(TestCase):
 
