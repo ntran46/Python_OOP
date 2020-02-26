@@ -39,13 +39,8 @@ class Doctor(Person):
     @classmethod
     def validate(cls, office_num: int, income: int):
         """This is a class method that validates different possible type and value errors."""
-        if office_num < 1:
-            raise ValueError("Office Number should be more than 0.")
-        if type(office_num) is not int:
-            raise TypeError("Office number is an integer number.")
-        if income < 100000:
-            raise ValueError("Income should not be less than $100000.")
-        if type(income) is not int:
-            raise TypeError("Income should be an integer.")
-
+        if office_num < 1 or type(office_num) is not int:
+            raise ValueError("Office Number should be more than 0. Office number is an integer number.")
+        if income < 100000 or type(income) is not int:
+            raise ValueError("Income should not be less than $100000. Income should be an integer.")
 

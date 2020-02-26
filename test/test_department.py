@@ -17,6 +17,7 @@ class TestDepartment(TestCase):
         self.doctor2 = Doctor("Johnny", "Kenedy", "1984-1-30", "1444 Oakway, North Vancouver, Vancouver, BC", 1, False,
                               123, 150000)
         self.patient2 = Patient("Bill", "Stark", "1960-9-2", "1111 Columbia, New Westminster, BC", 2, False, 589)
+        self.patient3 = Patient("Tony", "Stark", "1960-9-2", "1111 Columbia, New Westminster, BC", 12, False, 589)
         self.department.add_person(self.patient1)
         self.department.add_person(self.patient2)
         self.department.add_person(self.doctor1)
@@ -51,8 +52,11 @@ class TestDepartment(TestCase):
 
     def test_check_existing_person(self):
         """Test to check if an object (person) is in the department"""
-        test_id = self.doctor2.get_id()
-        self.assertEqual(self.department.person_exist(test_id), True)
+        test_id = self.patient3.get_id()
+        self.assertEqual(self.department.person_exist(test_id), False)
+
+        test_id_1 = self.doctor2.get_id()
+        self.assertEqual(self.department.person_exist(test_id_1), True)
 
 
     def test_get_existing_person(self):

@@ -51,7 +51,7 @@ class TestDoctor(TestCase):
         self.assertEqual(self.patient.get_description(), None)
 
         self.patient_1 = Patient("Uy", "Tran", "1990-11-20", "1111 Columbia, New Westminster, BC",
-                               2, True, 300, 200000)
+                               2, False, 300, 200000)
         self.assertEqual(self.patient_1.get_description(), None)
 
     def test_get_room_num(self):

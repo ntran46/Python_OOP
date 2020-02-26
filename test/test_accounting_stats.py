@@ -17,8 +17,14 @@ class TestAccountingStats(TestCase):
 
     def test_invalid_constructor(self):
         """Test an object with invalid parameters"""
+        with self.assertRaises(ValueError):
+            stats_4 = AccountingStats(0, 100, 200000)
+
         with self.assertRaises(TypeError):
             stats_1 = AccountingStats("5", 100, 150000)
+
+        with self.assertRaises(ValueError):
+            stats_5 = AccountingStats(5, 0, 200000)
 
         with self.assertRaises(TypeError):
             stats_2 = AccountingStats(5, "100", 150000)
@@ -27,7 +33,7 @@ class TestAccountingStats(TestCase):
             stats_3 = AccountingStats(5, 100, "150000")
 
         with self.assertRaises(ValueError):
-            stats_4 = AccountingStats(5, 100, 200000)
+            stats_6 = AccountingStats(5, 100, 800000)
 
     def test_get_released_patient_num(self):
         """Test to get the total number of released patients"""
