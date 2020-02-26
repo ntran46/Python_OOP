@@ -49,5 +49,5 @@ class Patient(Person):
     @classmethod
     def validate(cls, room_num: int):
         """This is a class method that validates different possible type and value errors."""
-        if room_num < 0 or type(room_num) is not int:
+        if room_num <= 0 or type(room_num) is not int:
             raise ValueError("Room Number should be more than 0. Room number is an integer number.")
