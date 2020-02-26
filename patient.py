@@ -10,7 +10,6 @@ class Patient(Person):
                  bill=0.0):
         """Initialize a constructor of a Patient object"""
         super().__init__(first_name, last_name, date_of_birth, address, id, is_released)
-        # self.validate_attributes([room_num, bill], (int, float))
         self._room_num = room_num
         self._bill = bill
         self._is_released = is_released
@@ -22,12 +21,12 @@ class Patient(Person):
 
     @property
     def bill(self):
-        """"""
+        """Function to get the bill of a patient object"""
         return self._bill
 
     @bill.setter
     def bill(self, bill):
-        """"""
+        """Function to set the bill of a patient"""
         self._bill = bill
         self._is_released = True
 
