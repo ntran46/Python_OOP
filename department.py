@@ -16,19 +16,19 @@ class Department:
         """Function to add a person to a department list"""
         self._department.append(person)
 
-    def remove_person_by_id(self, id: str):
+    def remove_person_by_id(self, id: int):
         """Function to remove a person out of a department list"""
         for obj in self._department:
             if obj.get_id == id:
                 self._department.remove(obj)
 
-    def get_person_by_id(self, id: str):
+    def get_person_by_id(self, id: int):
         """Function to get an ID of a person in the list"""
         for obj in self._department:
             if obj.get_id == id:
                 return obj
 
-    def person_exist(self, id: str):
+    def person_exist(self, id: int):
         """Function to check if a person belongs to the department"""
         for obj in self._department:
             if obj.get_id == id:

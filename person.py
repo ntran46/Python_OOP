@@ -5,7 +5,7 @@ from datetime import datetime
 class Person:
     """Define a Person class"""
 
-    def __init__(self, first_name: str, last_name: str, date_of_birth: str, address: str, id: int, is_released: bool):
+    def __init__(self, first_name: str, last_name: str, date_of_birth, address: str, id: int, is_released: bool):
         """Initialize a constructor of a Person instance"""
         self.validation(first_name, last_name, address, id)
         self._id = id
@@ -13,19 +13,11 @@ class Person:
         self._lastName = last_name
         self._date_of_birth = datetime.strptime(date_of_birth, "%Y-%m-%d")
         self._address = address
-        self._status = False
         self._is_released = is_released
 
     def is_released(self):
         """Function to get the status of a Person object"""
         return self._is_released
-
-    # def set_id(self, id: int):
-    #     """Function to set the ID of a Person object"""
-    #     if id is not int:
-    #         raise TypeError("Id should be an integer.")
-    #     else:
-    #         self._id = id
 
     def get_id(self):
         """Function to get the ID of a Person object"""
