@@ -1,5 +1,7 @@
 from accounting_stats import AccountingStats
 
+"""This is the Department class which contains information all doctors and patients"""
+
 
 class Department:
     """Define a Department class"""
@@ -37,22 +39,20 @@ class Department:
         return self._department
 
     def get_statistics(self):
-        """Function to get statistics information from all departments"""
+        """Function to get statistics information from all patients"""
         _released_num = 0
         _remaining_num = 0
-        _total_bill_each_patient = []
+        _total_bill_released_patients = 0
 
         for obj in self._department:
-            temp = []
             if obj.is_released:
-                temp.extend([obj.get_id, obj.get_bill_amount])
                 _released_num += 1
-                _total_bill_each_patient.append(temp)
+                _total_bill_released_patients += obj.get_bill_amount
             else:
                 _remaining_num += 1
-        return AccountingStats(_released_num, _remaining_num, _total_bill_each_patient)
+        return AccountingStats(_released_num, _remaining_num, _total_bill_released_patients)
 
-    @classmethod
-    def validation(cls, name: str):
+    @staticmethod
+    def validation(name):
         if type(name) is not str:
             raise TypeError("Name of the department should be a string.")
