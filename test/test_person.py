@@ -14,6 +14,7 @@ class TestPerson(TestCase):
         self.assertIsNotNone(self.person)
         self.assertIsInstance(self.person, Person)
 
+    def test_invalid_init(self):
         with self.assertRaises(TypeError):
             person_1 = Person(1, "Taer", "1995-06-15", "3432 Newtons, Richmond, BC", 1, False)
 

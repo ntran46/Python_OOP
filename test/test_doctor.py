@@ -13,6 +13,8 @@ class TestDoctor(TestCase):
         self.assertIsNotNone(self.doctor)
         self.assertIsInstance(self.doctor, Doctor)
 
+    def test_invalid_constructor(self):
+
         with self.assertRaises(TypeError):
             doctor_1 = Doctor("Maria", "Tran", "1980-09-12", "1444 Oakway, North Vancouver, Vancouver, BC",
                              1, False, "123", 145000)
