@@ -28,7 +28,7 @@ class AccountingStats:
     @classmethod
     def validation(cls, released_patient: int, not_released_patient: int, total_bill: int):
         """Function to validate all attributes"""
-        if released_patient <= 0:
+        if released_patient < 0:
             raise ValueError("Released patient numbers cannot be smaller than 0. It should be "
                              "at least 0.")
         if type(released_patient) is not int:

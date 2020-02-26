@@ -6,7 +6,7 @@ class TestAccountingStats(TestCase):
 
     """This is a test class to test the AccountingStats class"""
 
-    def setUp(self) -> None:
+    def setUp(self):
         """Initialize setup object"""
         self.stats = AccountingStats(5, 100, 150000)
 
