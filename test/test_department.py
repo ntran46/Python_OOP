@@ -51,6 +51,8 @@ class TestDepartment(TestCase):
         test_case = self.department.get_statistics()
         self.assertEqual(test_case.get_not_released_patient_num(), 1)
 
+        with self.assertRaises(ValueError):
+            self.department.remove_person_by_id(100)
 
     def test_check_existing_person(self):
         """Test to check if an object (person) is in the department"""
@@ -66,6 +68,9 @@ class TestDepartment(TestCase):
         """Test to get an object (person) from the department"""
         test_id = self.patient2.get_id()
         self.assertEqual(self.department.get_person_by_id(test_id), self.patient2)
+
+        with self.assertRaises(ValueError):
+            self.department.get_person_by_id(100)
 
 
     def test_get_department_name(self):

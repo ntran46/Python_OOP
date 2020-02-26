@@ -19,6 +19,7 @@ class TestAccountingStats(TestCase):
         """Test an object with invalid parameters"""
         with self.assertRaises(ValueError):
             stats_4 = AccountingStats(0, 100, 200000)
+            stats_1 = AccountingStats("5", 100, 150000)
 
         with self.assertRaises(TypeError):
             stats_1 = AccountingStats("5", 100, 150000)

@@ -18,15 +18,22 @@ class Department:
 
     def remove_person_by_id(self, id: int):
         """Function to remove a person out of a department list"""
+        check = False
         for obj in self._department:
             if obj.get_id() == id:
                 self._department.remove(obj)
+                check = True
+        if not check:
+            raise ValueError(f"The id {id} does not exist.")
 
     def get_person_by_id(self, id: int):
         """Function to get an ID of a person in the list"""
+        check = False
         for obj in self._department:
             if obj.get_id() == id:
                 return obj
+        if not check:
+            raise ValueError(f"The id {id} does not exist.")
 
     def person_exist(self, id: int):
         """Function to check if a person belongs to the department"""

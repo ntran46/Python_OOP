@@ -2,19 +2,19 @@ from unittest import TestCase
 from doctor import Doctor
 
 class TestDoctor(TestCase):
-    """This is a test class to test the House class"""
+    """This is a test class to test the Doctor class"""
     def setUp(self):
         """This method defines the object one time so that we won't have to create the object over and over. """
         self.doctor = Doctor("Maria", "Tran", "1980-09-12", "1444 Oakway, North Vancouver, Vancouver, BC",
                              1, False, 123, 145000)
 
     def test_constructor(self):
-        """This method tests the constructor of the House class."""
+        """This method tests the constructor of the Doctor class."""
         self.assertIsNotNone(self.doctor)
         self.assertIsInstance(self.doctor, Doctor)
 
     def test_invalid_constructor(self):
-
+        """This method tests invalid constructors of the Doctor class."""
         with self.assertRaises(TypeError):
             doctor_1 = Doctor("Maria", "Tran", "1980-09-12", "1444 Oakway, North Vancouver, Vancouver, BC",
                              1, False, "123", 145000)
@@ -32,18 +32,18 @@ class TestDoctor(TestCase):
                              1, False, 123, 90000)
 
     def test_is_released(self):
-        """Checks if the selling status returns a valid value. (True or False)"""
+        """Checks if the released status returns a valid value. (True or False)"""
         self.assertEqual(self.doctor.is_released(), False)
         self.assertFalse(self.doctor.is_released())
         self.assertIsNotNone(self.doctor.is_released())
 
     def test_get_office_num(self):
-        """This checks if the get_address() method works as it should."""
+        """This checks if the method return the correct office number's value."""
         self.assertEqual(self.doctor.get_office_num(), 123)
         self.assertIsNotNone(self.doctor.get_office_num())
 
     def test_get_income_amount(self):
-        """Checks if the selling status returns a valid value. (True or False)"""
+        """This checks if the method return the correct income value."""
         self.assertEqual(self.doctor.get_income_amount(), 145000)
         self.assertIsNotNone(self.doctor.get_income_amount())
 
