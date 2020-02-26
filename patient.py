@@ -13,9 +13,7 @@ class Patient(Person):
         # self.validate_attributes([room_num, bill], (int, float))
         self._room_num = room_num
         self._bill = bill
-        self._status = False
-        self._is_released = False
-        self._is_released = False
+        self._is_released = is_released
 
     @property
     def is_released(self):

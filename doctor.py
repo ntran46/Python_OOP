@@ -1,4 +1,5 @@
 from person import Person
+from datetime import datetime
 
 
 class Doctor(Person):
@@ -6,25 +7,22 @@ class Doctor(Person):
 
     PERSON_TYPE = 'Doctor'
 
-    def __init__(self, first_name: str, last_name: str, date_of_birth: str, address: str, id: int, is_released: bool, office_num: int,
+    def __init__(self, first_name: str, last_name: str, date_of_birth, address: str, id: int, is_released: bool, office_num: int,
                  income: int):
         """Initialize a constructor of a Doctor object"""
-        super().__init__(first_name, last_name, date_of_birth, address, id, is_released)
-        # self.validate_attributes([office_num, income], (int))
+        self.validate(office_num, income)
         self._office_num = office_num
         self._income = income
-        self._status = False
-        self._is_released = False
+        super().__init__(first_name, last_name, date_of_birth, address, id, is_released)
 
-    @property
     def is_released(self):
         """Function to get the status of a Doctor object"""
         return self._is_released
 
     def get_description(self):
         """Function to get the description of a Doctor object"""
-        return f"The doctor {self._firstName} {self._lastName}, ID number {self._id}, "\
-               f"born in {self._date_of_birth:%Y-%m-%d}, works in office room {self._office_num}."
+        print(f"The doctor {self._firstName} {self._lastName}, ID number {self._id}, "
+              f"born in {self._date_of_birth:%Y-%m-%d}, works in office room {self._office_num}.")
 
     def get_type(self):
         """Function to get the type of a Doctor object"""
@@ -37,5 +35,17 @@ class Doctor(Person):
     def get_income_amount(self):
         """Function to get the income amount of a Doctor object"""
         return self._income
+
+    @classmethod
+    def validate(cls, office_num: int, income: int):
+        """This is a class method that validates different possible type and value errors."""
+        if office_num < 1:
+            raise ValueError("Office Number should be more than 0.")
+        if type(office_num) is not int:
+            raise TypeError("Office number is an integer number.")
+        if income < 100000:
+            raise ValueError("Income should not be less than $100000.")
+        if type(income) is not int:
+            raise TypeError("Income should be an integer.")
 
 
