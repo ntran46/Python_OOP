@@ -20,12 +20,14 @@ class Patient(Person):
 
     @property
     def bill(self):
-        """"""
+        """Function to get the bill for a patient"""
         return self._bill
 
-    def set_bill(self, bill):
-        """"""
-        self._bill = bill
+    @bill.setter
+    def bill(self, value):
+        """Function to set the bill for a patient"""
+        self._bill = value
+        self._is_released = True
 
     def get_description(self):
         """Function to get the description of a Patient object"""
@@ -44,13 +46,8 @@ class Patient(Person):
         """Function to get the room number of a Patient object"""
         return self._room_num
 
-    def get_bill_amount(self):
-        """Function to get the bill amount of a Patient object"""
-        return self._bill
-
     @classmethod
     def validate(cls, room_num: int):
         """This is a class method that validates different possible type and value errors."""
-        if room_num < 1 or type(room_num) is not int:
+        if room_num < 0 or type(room_num) is not int:
             raise ValueError("Room Number should be more than 0. Room number is an integer number.")
-
