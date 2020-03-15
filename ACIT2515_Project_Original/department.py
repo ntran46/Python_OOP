@@ -11,6 +11,7 @@ class Department:
         self.validation(name)
         self._name = name
         self._department = []
+        # self._patient = dict()
 
     def add_person(self, person: object):
         """Function to add a person to a department list"""
@@ -80,6 +81,24 @@ class Department:
                 else:
                     _remaining_num += 1
         return AccountingStats(_released_num, _remaining_num, _total_bill_released_patients)
+
+    def to_dict(self):
+        output = dict()
+        output["name"] = self._name
+        output["patient"] = list()
+        for patient in self._department:
+            output["patient"].append(patient.to_dict())
+        return output
+
+    def update_patient(self, patient_id, first_name):
+        """ Updates name for the student <student_id>
+            Raises Exception if the student does not exist (or values are not correct) """
+
+        patient = self.get_person_by_id(patient_id)
+        if not patient:
+            raise ValueError("Patient not in department")
+
+        patient.set_first_name(first_name)
 
     @staticmethod
     def validation(name):
