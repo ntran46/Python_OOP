@@ -26,26 +26,33 @@ if __name__ == "__main__":
     patient3 = Patient("Jame", "O'Conner", "1966-8-1", "433 Bigbang, New Westminster, BC", 3, False, 610)
     patient4 = Patient("Bond", "Start", "1959-9-23", "131 Columbia, Burnaby, BC", 4, False, 599)
     patient5 = Patient("Micheal", "Conner", "1969-8-1", "693 Bigbang, Surrey, BC", 5, False, 610)
-
-    doctor1.get_description()
-    # print(doctor1.get_type())
-
-    patient1.get_description()
-    # print(patient1.get_type())
-
-    patient2.get_description()
-
-    patient1.bill = 10000
-    patient1.get_description()
-
+    #
+    # # doctor1.get_description()
+    # # print(doctor1.get_type())
+    #
+    # # patient1.get_description()
+    # # print(patient1.get_type())
+    #
+    # # patient2.get_description()
+    #
+    # patient1.bill = 10000
+    # # patient1.get_description()
+    #
     department1 = Department("Surgery")
     department1.add_person(patient1)
 
     department1.add_person(patient2)
     department1.add_person(doctor2)
+    department1.add_person(doctor1)
     department1.add_person(patient3)
     department1.add_person(patient4)
     department1.add_person(patient5)
-    department1.remove_person_by_id(patient5.get_id())
 
-    print_report(department1)
+
+    # print_report(department1)
+
+    output = department1._read_from_file()
+    print(output)
+    # print_report(department1)
+    # department1._write_to_file()
+    # print(department1.to_list())
