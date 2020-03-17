@@ -18,6 +18,11 @@ class Patient(Person):
         """Function to get the status of a Patient object"""
         return self._is_released
 
+    def set_first_name(self, first_name):
+        if not first_name or type(first_name) is not str:
+            raise ValueError("Invalid first name")
+        self.firstName = first_name
+
     @property
     def bill(self):
         """Function to get the bill for a patient"""
@@ -45,6 +50,21 @@ class Patient(Person):
     def get_room_num(self):
         """Function to get the room number of a Patient object"""
         return self._room_num
+
+    def to_dict(self):
+        output = dict()
+        output["first_name"] = self._firstName
+        output["last_name"] = self._lastName
+        output["date_of_birth"] = self._date_of_birth
+        output["address"] = self._address
+        output["is_released"] = self._is_released
+        output["id"] = self._id
+        output["room_num"] = self._room_num
+        output["bill"] = self._bill
+        return output
+
+    def __str__(self):
+        return f"<Patient {self._firstName} {self._lastName} ({self._id})"
 
     @classmethod
     def validate(cls, room_num: int):

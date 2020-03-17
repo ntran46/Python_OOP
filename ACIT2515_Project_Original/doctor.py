@@ -36,6 +36,18 @@ class Doctor(Person):
         """Function to get the income amount of a Doctor object"""
         return self._income
 
+    def to_dict(self):
+        output = dict()
+        output["first_name"] = self._firstName
+        output["last_name"] = self._lastName
+        output["date_of_birth"] = self._date_of_birth
+        output["address"] = self._address
+        output["id"] = self._id
+        output["is_released"] = self._is_released
+        output["office_num"] = self._office_num
+        output["income"] = self._income
+        return output
+
     @classmethod
     def validate(cls, office_num: int, income: int):
         """This is a class method that validates different possible type and value errors."""

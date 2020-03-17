@@ -49,6 +49,10 @@ class Person:
         """Abstract method to print a type of the Person object"""
         raise NotImplementedError("This is an abstract method")
 
+    @abstractmethod
+    def to_dict(self):
+        raise NotImplementedError("This is an abstract method")
+
     @classmethod
     def validation(cls, first_name: str, last_name: str, address: str, id: int):
         """Function to validate type of all parameters"""
