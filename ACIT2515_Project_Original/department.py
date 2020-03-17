@@ -1,9 +1,7 @@
 from accounting_stats import AccountingStats
 from doctor import Doctor
 from patient import Patient
-from person import Person
 import json
-import os
 
 """This is the Department class which contains information all doctors and patients"""
 
@@ -24,25 +22,43 @@ class Department:
 
         with open(self._filepath) as file:
             data = json.load(file)
-            for doctor in data["doctor"]:
-                self.output["doctor"].append(doctor)
-            for patient in data["patient"]:
-                self.output["patient"].append(patient)
-        # for person in self.output["patient"]:
-        #     temp = []
-        #     for key, value in person.items():
-        #         temp.append(value)
-        #     print(temp)
-        #     patient = Patient(tuple(temp))
-        #     self._department.append(patient)
+            for person1 in data["doctor"]:
+                self.output["doctor"].append(person1)
+                # datetime_object = person1["date_of_birth"][0:-9]
+                # person = Doctor(person1["first_name"], person1["last_name"],
+                #                 datetime_object, person1["address"], person1["id"],
+                #                 person1["is_released"], person1["office_num"], person1["income"])
+                # self._department.append(person)
+
+            for person2 in data["patient"]:
+                self.output["patient"].append(person2)
+                # datetime_object = person2["date_of_birth"][0:-9]
+                # person = Patient(person2["first_name"], person2["last_name"],
+                #                  datetime_object, person2["address"], person2["id"],
+                #                  person2["is_released"], person2["room_num"], person2["bill"])
+                # self._department.append(person)
+        self.create_entities(self.output["patient"], "patient")
+        self.create_entities(self.output["doctor"], "doctor")
         return self.output
+
+    def create_entities(self, person_list, person_type):
+        """Create entity from data loaded from file"""
+        for data in person_list:
+            datetime_object = data["date_of_birth"][0:-9]
+            if person_type == 'patient':
+                person = Patient(data["first_name"], data["last_name"],
+                                 datetime_object, data["address"], data["id"],
+                                 data["is_released"], data["room_num"], data["bill"])
+                self._department.append(person)
+            elif person_type == 'doctor':
+                person = Doctor(data["first_name"], data["last_name"],
+                                datetime_object, data["address"], data["id"],
+                                data["is_released"], data["office_num"], data["income"])
+                self._department.append(person)
 
     def _write_to_file(self):
         """Export the entities as a JSON serialized list in the file"""
         temp = self.to_dict()
-        temp['doctor'] = list({each['id']: each for each in temp['doctor']}.values())
-        temp['patient'] = list({each['id']: each for each in temp['patient']}.values())
-
         with open(self._filepath, "w") as file:
             json.dump(temp, file, default=str)
 
@@ -122,8 +138,10 @@ class Department:
         for person in self._department:
             if person.get_type() == 'Patient':
                 self.output['patient'].append(person.to_dict())
-            else:
+                self.output['patient'] = list({each['id']: each for each in self.output['patient']}.values())
+            elif person.get_type() == 'Doctor':
                 self.output['doctor'].append(person.to_dict())
+                self.output['doctor'] = list({each['id']: each for each in self.output['doctor']}.values())
 
         if doc is None and pat is not None:
             return self.output["patient"]
@@ -133,7 +151,7 @@ class Department:
             return self.output
 
     def update_patient(self, patient_id, first_name):
-        """ Updates name for the student <student_id>
+        """ Updates name for the person <student_id>
             Raises Exception if the student does not exist (or values are not correct) """
 
         patient = self.get_person_by_id(patient_id)
@@ -141,6 +159,7 @@ class Department:
             raise ValueError("Patient not in department")
 
         patient.set_first_name(first_name)
+        self._write_to_file()
 
     @staticmethod
     def validation(name):
