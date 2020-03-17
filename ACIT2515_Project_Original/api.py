@@ -1,10 +1,12 @@
 from flask import Flask, jsonify, request, make_response
+
 from department import Department
 from patient import Patient
+from doctor import Doctor
 
 app = Flask(__name__)
+department = Department("Surgery")
 
-department = Department("Emergency")
 
 @app.route("/department/person", methods=["POST"])
 def add_patient():
@@ -28,11 +30,22 @@ def add_patient():
         message = str(e)
         return make_response(message, 400)
 
+
 @app.route("/department", methods=["GET"])
-def list_patients():
+def list_employees():
     return jsonify(department.to_dict())
 
-#
+
+@app.route("/department/patient", methods=["GET"])
+def list_patient():
+    return jsonify(department.to_dict("","patient"))
+
+
+@app.route("/department/doctor", methods=["GET"])
+def list_doctor():
+    return jsonify(department.to_dict("doctor"))
+
+
 @app.route("/department/patient/<int:patient_id>", methods=["GET"])
 def get_patient(patient_id):
     return jsonify(department.get_person_by_id(patient_id).to_dict())
@@ -76,6 +89,7 @@ def validate_setup():
             "data": request.data.decode(),
         }
     )
+
 
 if __name__ == "__main__":
     app.run(debug=True)
