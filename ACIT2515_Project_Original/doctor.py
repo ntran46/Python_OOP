@@ -19,6 +19,21 @@ class Doctor(Person):
         """Function to get the status of a Doctor object"""
         return self._is_released
 
+    def set_first_name(self, first_name):
+        if not first_name or type(first_name) is not str:
+            raise ValueError("Invalid first name")
+        self._firstName = first_name
+
+    def set_last_name(self, last_name):
+        if not last_name or type(last_name) is not str:
+            raise ValueError("Invalid last name")
+        self._lastName = last_name
+
+    def set_office_num(self, office_num):
+        if not office_num or type(office_num) is not int:
+            raise ValueError("Invalid office number")
+        self._office_num = office_num
+
     def get_description(self):
         """Function to get the description of a Doctor object"""
         print(f"The doctor {self._firstName} {self._lastName}, ID number {self._id}, "

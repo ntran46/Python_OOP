@@ -1,7 +1,6 @@
 
 """This is the AccountingStats class which shows the statistics of the accounting department of the hospital"""
 
-
 class AccountingStats:
 
     """Define the AccountingStats class"""
@@ -25,6 +24,14 @@ class AccountingStats:
         """Function to get the total bill amount of all released patient"""
         return self._total_bill_amount_released_patients
 
+    def to_dict(self):
+        """ Return department instance state as dictionary """
+        output = dict()
+        output["released_patient"] = self._released_patient_num
+        output["not_released_patient"] = self._not_released_patient_num
+        output["total_bill"] = self._total_bill_amount_released_patients
+        return output
+
     @classmethod
     def validation(cls, released_patient: int, not_released_patient: int, total_bill: int):
         """Function to validate all attributes"""
@@ -37,7 +44,7 @@ class AccountingStats:
         if type(not_released_patient) is not int:
             raise TypeError("Number of patients who "
                              "are not released yet should be an integer.")
-        if not_released_patient <= 0:
+        if not_released_patient < 0:
             raise ValueError("Patients who are not released yet cannot be smaller than 0. "
                              "They should be at least 0.")
         if total_bill >= 200000 or type(total_bill) is not int:

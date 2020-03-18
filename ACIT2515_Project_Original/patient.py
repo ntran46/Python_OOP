@@ -21,7 +21,17 @@ class Patient(Person):
     def set_first_name(self, first_name):
         if not first_name or type(first_name) is not str:
             raise ValueError("Invalid first name")
-        self.firstName = first_name
+        self._firstName = first_name
+
+    def set_last_name(self, last_name):
+        if not last_name or type(last_name) is not str:
+            raise ValueError("Invalid last name")
+        self._lastName = last_name
+
+    def set_room_num(self, room_num):
+        if not room_num or type(room_num) is not int:
+            raise ValueError("Invalid room number")
+        self._room_num = room_num
 
     @property
     def bill(self):

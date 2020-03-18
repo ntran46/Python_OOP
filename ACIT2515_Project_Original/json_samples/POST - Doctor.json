@@ -1,0 +1,10 @@
+{
+    "first_name": "Johnny",
+    "last_name": "Kenedy",
+    "date_of_birth": "1984-1-30",
+    "address": "1444 Oakway, North Vancouver, Vancouver, BC",
+    "id": 3,
+    "is_released": false,
+    "office_num": 123,
+    "income": 150000
+}
