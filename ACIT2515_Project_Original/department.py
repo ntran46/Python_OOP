@@ -76,30 +76,34 @@ class Department:
                 check = True
         if not check:
             raise ValueError(f"The id {id} does not exist.")
-        self._write_to_file()
+        # self._write_to_file()
 
     def get_person_by_id(self, id: int):
         """Function to get an ID of a person in the list"""
-        check = False
+        # check = False
         for obj in self._department:
             if obj.get_id() == id:
                 return obj
-        if not check:
-            raise ValueError(f"The id {id} does not exist.")
+        # if not check:
+        #     raise ValueError(f"The id {id} does not exist.")
 
     def get_person_by_type(self, person_type: str):
         """Function is to give a description all people with a given type"""
         type_flat = 0
+        person_type_list = []
         if type(person_type) is not str:
             raise TypeError("The type input is not a string")
 
         for person in self._department:
             if person.get_type() == person_type:
+                person_type_list.append(person.to_dict())
                 person.get_description()
-                type_flat += 1
+                # type_flat += 1
 
-        if type_flat == 0:
-            return f"There is no type \"{person_type}\" of person in the department {self._name}."
+        # if type_flat == 0:
+        #     return f"There is no type \"{person_type}\" of person in the department {self._name}."
+
+        return person_type_list
 
     def get_all_current_people(self):
         """Function is return all people in a department"""
@@ -133,32 +137,36 @@ class Department:
                     _remaining_num += 1
         return AccountingStats(_released_num, _remaining_num, _total_bill_released_patients)
 
-    def to_dict(self, doc="doctor", pat="patient"):
+    def to_dict(self):
         """ Return department instance state as dictionary """
+        output = dict()
+        output["name"] = self._name
+        output["Patient"] = list()
+        output["Doctor"] = list()
         for person in self._department:
             if person.get_type() == 'Patient':
-                self.output['patient'].append(person.to_dict())
-                self.output['patient'] = list({each['id']: each for each in self.output['patient']}.values())
+                output["Patient"].append(person.to_dict())
             elif person.get_type() == 'Doctor':
-                self.output['doctor'].append(person.to_dict())
-                self.output['doctor'] = list({each['id']: each for each in self.output['doctor']}.values())
+                output["Doctor"].append(person.to_dict())
+        return output
 
-        if doc is None and pat is not None:
-            return self.output["patient"]
-        elif doc is not None and pat is None:
-            return self.output["doctor"]
-        else:
-            return self.output
-
-    def update_patient(self, patient_id, first_name):
+    def update_person(self, person_id, first_name, last_name, office_room_num):
         """ Updates name for the person <student_id>
             Raises Exception if the student does not exist (or values are not correct) """
 
-        patient = self.get_person_by_id(patient_id)
-        if not patient:
+        person = self.get_person_by_id(person_id)
+        if not person:
             raise ValueError("Patient not in department")
 
-        patient.set_first_name(first_name)
+        if person.get_type() == 'Patient':
+            person.set_first_name(first_name)
+            person.set_last_name(last_name)
+            person.set_room_num(office_room_num)
+        if person.get_type() == 'Doctor':
+            person.set_first_name(first_name)
+            person.set_last_name(last_name)
+            person.set_office_num(office_room_num)
+
         self._write_to_file()
 
     @staticmethod
