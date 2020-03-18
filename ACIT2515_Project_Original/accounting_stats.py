@@ -35,12 +35,24 @@ class AccountingStats:
     @classmethod
     def validation(cls, released_patient: int, not_released_patient: int, total_bill: int):
         """Function to validate all attributes"""
+<<<<<<< HEAD:accounting_stats.py
+        if released_patient <= 0:
+            raise ValueError("Released patient numbers cannot be smaller than 0. It should be "
+                             "at least 0.")
+        if type(released_patient) is not int:
+            raise TypeError("Released patient numbers should be an "
+                             "integer.")
+        if not_released_patient <= 0:
+            raise ValueError("Patients who are not released yet cannot be smaller than 0. "
+                             "They should be at least 0.")
+=======
         if type(released_patient) is not int:
             raise TypeError("Released patient numbers should be an "
                              "integer.")
         if released_patient < 0:
             raise ValueError("Released patient numbers cannot be smaller than 0. It should be "
                              "at least 0.")
+>>>>>>> 2405b3057d12de0a50ce665705de3ca71cbb9a0e:ACIT2515_Project_Original/accounting_stats.py
         if type(not_released_patient) is not int:
             raise TypeError("Number of patients who "
                              "are not released yet should be an integer.")
