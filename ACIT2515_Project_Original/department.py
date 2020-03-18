@@ -15,42 +15,35 @@ class Department:
         self._name = name
         self._department = []
         self._filepath = "people.json"
-        self.output = {"name": self._name, "doctor": [], "patient": []}
+        self.output = {"name": self._name, "Doctor": [], "Patient": []}
+        self._read_from_file()
 
-    def _read_from_file(self):
+    def _read_from_file(self, filePath=""):
         """Read content from a file as a JSON and create entities accordingly"""
+        if filePath == "":
+            filePath = self._filepath
 
-        with open(self._filepath) as file:
+        with open(filePath) as file:
             data = json.load(file)
-            for person1 in data["doctor"]:
-                self.output["doctor"].append(person1)
-                # datetime_object = person1["date_of_birth"][0:-9]
-                # person = Doctor(person1["first_name"], person1["last_name"],
-                #                 datetime_object, person1["address"], person1["id"],
-                #                 person1["is_released"], person1["office_num"], person1["income"])
-                # self._department.append(person)
+            for person1 in data["Doctor"]:
+                self.output["Doctor"].append(person1)
+            for person2 in data["Patient"]:
+                self.output["Patient"].append(person2)
 
-            for person2 in data["patient"]:
-                self.output["patient"].append(person2)
-                # datetime_object = person2["date_of_birth"][0:-9]
-                # person = Patient(person2["first_name"], person2["last_name"],
-                #                  datetime_object, person2["address"], person2["id"],
-                #                  person2["is_released"], person2["room_num"], person2["bill"])
-                # self._department.append(person)
-        self.create_entities(self.output["patient"], "patient")
-        self.create_entities(self.output["doctor"], "doctor")
+        self.create_entities(self.output["Patient"], "Patient")
+        self.create_entities(self.output["Doctor"], "Doctor")
         return self.output
 
     def create_entities(self, person_list, person_type):
         """Create entity from data loaded from file"""
         for data in person_list:
             datetime_object = data["date_of_birth"][0:-9]
-            if person_type == 'patient':
+            if person_type == 'Patient':
                 person = Patient(data["first_name"], data["last_name"],
                                  datetime_object, data["address"], data["id"],
                                  data["is_released"], data["room_num"], data["bill"])
                 self._department.append(person)
-            elif person_type == 'doctor':
+            elif person_type == 'Doctor':
                 person = Doctor(data["first_name"], data["last_name"],
                                 datetime_object, data["address"], data["id"],
                                 data["is_released"], data["office_num"], data["income"])
@@ -64,32 +57,33 @@ class Department:
 
     def add_person(self, person: object):
         """Function to add a person to a department list"""
-        self._department.append(person)
-        self._write_to_file()
+        person_id = person.get_id()
+        result = self.get_person_by_id(person_id)
+        if result is not None:
+            raise ValueError("This person is already added in the department list")
+        else:
+            self._department.append(person)
+            self._write_to_file()
 
-    def remove_person_by_id(self, id: int):
+    def remove_person_by_id(self, ID: int):
         """Function to remove a person out of a department list"""
         check = False
         for obj in self._department:
-            if obj.get_id() == id:
+            if obj.get_id() == ID:
                 self._department.remove(obj)
                 check = True
         if not check:
-            raise ValueError(f"The id {id} does not exist.")
+            raise ValueError(f"The id {ID} does not exist.")
         self._write_to_file()
 
-    def get_person_by_id(self, id: int):
+    def get_person_by_id(self, ID: int):
         """Function to get an ID of a person in the list"""
-        # check = False
         for obj in self._department:
-            if obj.get_id() == id:
+            if obj.get_id() == ID:
                 return obj
-        # if not check:
-        #     raise ValueError(f"The id {id} does not exist.")
 
     def get_person_by_type(self, person_type: str):
         """Function is to give a description all people with a given type"""
-        type_flat = 0
         person_type_list = []
         if type(person_type) is not str:
             raise TypeError("The type input is not a string")
@@ -98,11 +92,6 @@ class Department:
             if person.get_type() == person_type:
                 person_type_list.append(person.to_dict())
                 person.get_description()
-                type_flat += 1
-
-        # if type_flat == 0:
-        #     return f"There is no type \"{person_type}\" of person in the department {self._name}."
-
         return person_type_list
 
     def get_all_current_people(self):
@@ -110,10 +99,10 @@ class Department:
         for person in self._department:
             person.get_description()
 
-    def person_exist(self, id: int):
+    def person_exist(self, ID: int):
         """Function to check if a person belongs to the department"""
         for obj in self._department:
-            if obj.get_id() == id:
+            if obj.get_id() == ID:
                 return True
             else:
                 return False
@@ -146,8 +135,10 @@ class Department:
         for person in self._department:
             if person.get_type() == 'Patient':
                 output["Patient"].append(person.to_dict())
+
             elif person.get_type() == 'Doctor':
                 output["Doctor"].append(person.to_dict())
+
         return output
 
     def update_person(self, person_id, first_name, last_name, office_room_num, bill_income):

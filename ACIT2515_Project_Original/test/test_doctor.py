@@ -38,6 +38,30 @@ class TestDoctor(TestCase):
         self.assertFalse(self.doctor.is_released())
         self.assertIsNotNone(self.doctor.is_released())
 
+    def test_set_first_name(self):
+        """This method ensures that we coded correctly for set_first_name() method."""
+        with self.assertRaises(ValueError):
+            self.doctor.set_first_name(23435)
+            self.doctor.set_first_name("Jose")
+
+    def test_set_last_name(self):
+        """This method ensures that we coded correctly for set_last_name() method."""
+        with self.assertRaises(ValueError):
+            self.doctor.set_last_name(23435)
+            self.doctor.set_last_name("Nguyen")
+
+    def test_set_office_num(self):
+        """This method ensures that we coded correctly for set_office_num() method."""
+        with self.assertRaises(ValueError):
+            self.doctor.set_office_num("test")
+            self.doctor.set_office_num(546)
+
+    def test_set_income(self):
+        """This method ensures that we coded correctly for set_income() method."""
+        with self.assertRaises(ValueError):
+            self.doctor.set_income("test")
+            self.doctor.set_income(320000)
+
     def test_get_office_num(self):
         """This checks if the method return the correct office number's value."""
         self.assertEqual(self.doctor.get_office_num(), 123)

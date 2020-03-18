@@ -2,7 +2,7 @@ from datetime import datetime
 from unittest import TestCase
 from patient import Patient
 
-class TestDoctor(TestCase):
+class TestPatient(TestCase):
     """This is a test class to test the Patient class"""
     def setUp(self):
         """This method defines the object one time so that we won't have to create the object over and over. """
