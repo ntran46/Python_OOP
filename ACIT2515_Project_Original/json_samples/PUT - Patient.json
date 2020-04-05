@@ -1,0 +1,10 @@
+{
+    "first_name": "Mahsa",
+    "last_name": "Taer",
+    "date_of_birth": "1970-12-12",
+    "address": "3432 Newtons, Richmond, BC",
+    "id": 2,
+    "is_released": true,
+    "room_num": 400,
+    "bill": 40000
+}
