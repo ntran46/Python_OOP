@@ -26,6 +26,9 @@ def add_person(person_type):
                             data["is_released"], data["office_num"], data["income"])
             department.add_person(doctor)
 
+        else:
+            return make_response("Type not found", 400)
+
         return make_response(str(data["id"]), 200)
     except ValueError as e:
         message = str(e)
@@ -88,9 +91,9 @@ def update_patient(person_id, person_type):
             return make_response("Invalid JSON: missing office number", 404)
     try:
         if person_type == 'Patient':
-            department.update_person(person_id, data["first_name"], data["last_name"], data["room_num"])
+            department.update_person(person_id, data["first_name"], data["last_name"], data["room_num"], data["bill"])
         elif person_type == 'Doctor':
-            department.update_person(person_id, data["first_name"], data["last_name"], data["office_num"])
+            department.update_person(person_id, data["first_name"], data["last_name"], data["office_num"], data["income"])
 
         return make_response("OK", 200)
     except ValueError as e:

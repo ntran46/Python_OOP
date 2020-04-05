@@ -34,6 +34,11 @@ class Doctor(Person):
             raise ValueError("Invalid office number")
         self._office_num = office_num
 
+    def set_income(self, income):
+        if not income or type(income) is not int:
+            raise ValueError("Invalid income")
+        self._income = income
+
     def get_description(self):
         """Function to get the description of a Doctor object"""
         print(f"The doctor {self._firstName} {self._lastName}, ID number {self._id}, "

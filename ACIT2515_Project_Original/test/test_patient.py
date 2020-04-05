@@ -2,7 +2,7 @@ from datetime import datetime
 from unittest import TestCase
 from patient import Patient
 
-class TestDoctor(TestCase):
+class TestPatient(TestCase):
     """This is a test class to test the Patient class"""
     def setUp(self):
         """This method defines the object one time so that we won't have to create the object over and over. """
@@ -72,4 +72,30 @@ class TestDoctor(TestCase):
                    'last_name': 'Tran',
                    'room_num': 300}
         self.assertDictEqual(self.D1, self.D2)
+
+    def test_set_first_name(self):
+        with self.assertRaises(ValueError):
+            self.patient.set_first_name(34)
+        self.patient.set_first_name("Mahsa")
+        self.assertEqual(self.patient.get_firstName(), "Mahsa")
+        self.assertIsNotNone(self.patient.get_firstName())
+
+    def test_set_last_name(self):
+        with self.assertRaises(ValueError):
+            self.patient.set_last_name(34)
+        self.patient.set_last_name("Taer")
+        self.assertEqual(self.patient.get_lastName(), "Taer")
+        self.assertIsNotNone(self.patient.get_lastName())
+
+    def test_set_room_num(self):
+        with self.assertRaises(ValueError):
+            self.patient.set_room_num("34")
+        self.patient.set_room_num(586)
+        self.assertEqual(self.patient.get_room_num(), 586)
+        self.assertIsNotNone(self.patient.get_room_num())
+
+    def test_str_(self):
+        self.patient.__str__()
+        self.assertEqual(self.patient.__str__(), "<Patient Uy Tran (2)")
+        self.assertIsNotNone(self.patient.__str__())
 
