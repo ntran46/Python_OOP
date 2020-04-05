@@ -1,6 +1,6 @@
-from accounting_stats import AccountingStats
-from doctor import Doctor
-from patient import Patient
+from models.accounting_stats import AccountingStats
+from models.doctor import Doctor
+from models.patient import Patient
 import json
 
 """This is the Department class which contains information all doctors and patients"""
@@ -16,23 +16,6 @@ class Department:
         self._department = []
         self._filepath = "people.json"
         self.output = {"name": self._name, "Doctor": [], "Patient": []}
-        self._read_from_file()
-
-    def _read_from_file(self, filePath=""):
-        """Read content from a file as a JSON and create entities accordingly"""
-        if filePath == "":
-            filePath = self._filepath
-
-        with open(filePath) as file:
-            data = json.load(file)
-            for person1 in data["Doctor"]:
-                self.output["Doctor"].append(person1)
-            for person2 in data["Patient"]:
-                self.output["Patient"].append(person2)
-
-        self.create_entities(self.output["Patient"], "Patient")
-        self.create_entities(self.output["Doctor"], "Doctor")
-        return self.output
 
     def create_entities(self, person_list, person_type):
         """Create entity from data loaded from file"""
@@ -49,12 +32,6 @@ class Department:
                                 data["is_released"], data["office_num"], data["income"])
                 self._department.append(person)
 
-    def _write_to_file(self):
-        """Export the entities as a JSON serialized list in the file"""
-        temp = self.to_dict()
-        with open(self._filepath, "w") as file:
-            json.dump(temp, file, default=str)
-
     def add_person(self, person: object):
         """Function to add a person to a department list"""
         person_id = person.get_id()
@@ -63,7 +40,6 @@ class Department:
             raise ValueError("This person is already added in the department list")
         else:
             self._department.append(person)
-            self._write_to_file()
 
     def remove_person_by_id(self, ID: int):
         """Function to remove a person out of a department list"""
@@ -74,7 +50,6 @@ class Department:
                 check = True
         if not check:
             raise ValueError(f"The id {ID} does not exist.")
-        self._write_to_file()
 
     def get_person_by_id(self, ID: int):
         """Function to get an ID of a person in the list"""
@@ -160,8 +135,6 @@ class Department:
             person.set_office_num(office_room_num)
             person.set_income(bill_income)
 
-        self._write_to_file()
-
     @staticmethod
     def validation(name):
         """ Validate input parameter"""
@@ -169,3 +142,27 @@ class Department:
             raise ValueError("A department's name must be defined!")
         if type(name) is not str:
             raise TypeError("Name of the department should be a string.")
+
+
+    # def _read_from_file(self, filePath=""):
+    #     """Read content from a file as a JSON and create entities accordingly"""
+    #     if filePath == "":
+    #         filePath = self._filepath
+    #
+    #     with open(filePath) as file:
+    #         data = json.load(file)
+    #         for person1 in data["Doctor"]:
+    #             self.output["Doctor"].append(person1)
+    #         for person2 in data["Patient"]:
+    #             self.output["Patient"].append(person2)
+    #
+    #     self.create_entities(self.output["Patient"], "Patient")
+    #     self.create_entities(self.output["Doctor"], "Doctor")
+    #     return self.output
+
+    #
+    # def _write_to_file(self):
+    #     """Export the entities as a JSON serialized list in the file"""
+    #     temp = self.to_dict()
+    #     with open(self._filepath, "w") as file:
+    #         json.dump(temp, file, default=str)

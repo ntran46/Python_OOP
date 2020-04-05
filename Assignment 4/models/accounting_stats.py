@@ -1,6 +1,7 @@
 
 """This is the AccountingStats class which shows the statistics of the accounting department of the hospital"""
 
+
 class AccountingStats:
 
     """Define the AccountingStats class"""

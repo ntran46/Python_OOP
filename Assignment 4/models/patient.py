@@ -1,18 +1,18 @@
-from person import Person
-
+from models.abstract_person import Person
+from peewee import Model, IntegerField, CharField
 
 class Patient(Person):
     """Define a Patient class"""
 
     PERSON_TYPE = 'Patient'
 
-    def __init__(self, first_name: str, last_name: str, date_of_birth: str, address: str, id: int, is_released: bool, room_num: int,
-                 bill=0.0):
-        """Initialize a constructor of a Patient object"""
-        self.validate(room_num)
-        self._room_num = room_num
-        self._bill = bill
-        super().__init__(first_name, last_name, date_of_birth, address, id, is_released)
+    # def __init__(self, first_name: str, last_name: str, date_of_birth: str, address: str, id: int, is_released: bool, room_num: int,
+    #              bill=0.0):
+    #     """Initialize a constructor of a Patient object"""
+    #     self.validate(room_num)
+    room_num = IntegerField()
+    bill = IntegerField()
+    # super().__init__(first_name, last_name, date_of_birth, address, id, is_released)
 
     def is_released(self):
         """Function to get the status of a Patient object"""

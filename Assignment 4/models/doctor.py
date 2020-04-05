@@ -1,19 +1,22 @@
-from person import Person
-from datetime import datetime
+from abc import ABC
+
+from peewee import Model, IntegerField
+
+from models.abstract_person import Person
 
 
-class Doctor(Person):
+class Doctor(Model):
     """Define a Doctor class"""
 
     PERSON_TYPE = 'Doctor'
 
-    def __init__(self, first_name: str, last_name: str, date_of_birth, address: str, id: int, is_released: bool, office_num: int,
-                 income: int):
-        """Initialize a constructor of a Doctor object"""
-        self.validate(office_num, income)
-        self._office_num = office_num
-        self._income = income
-        super().__init__(first_name, last_name, date_of_birth, address, id, is_released)
+    # def __init__(self, first_name: str, last_name: str, date_of_birth, address: str, id: int, is_released: bool, office_num: int,
+    #              income: int):
+    #     """Initialize a constructor of a Doctor object"""
+    # validate(office_num, income)
+    _office_num = IntegerField()
+    _income = IntegerField()
+    # super().__init__(first_name, last_name, date_of_birth, address, id, is_released)
 
     def is_released(self):
         """Function to get the status of a Doctor object"""
@@ -44,17 +47,17 @@ class Doctor(Person):
         print(f"The doctor {self._firstName} {self._lastName}, ID number {self._id}, "
               f"born in {self._date_of_birth:%Y-%m-%d}, works in office room {self._office_num}.")
 
-    def get_type(self):
-        """Function to get the type of a Doctor object"""
-        return Doctor.PERSON_TYPE
-
-    def get_office_num(self):
-        """Function to get the office number of a Doctor object"""
-        return self._office_num
-
-    def get_income_amount(self):
-        """Function to get the income amount of a Doctor object"""
-        return self._income
+    # def get_type(self):
+    #     """Function to get the type of a Doctor object"""
+    #     return Doctor.PERSON_TYPE
+    #
+    # def get_office_num(self):
+    #     """Function to get the office number of a Doctor object"""
+    #     return self._office_num
+    #
+    # def get_income_amount(self):
+    #     """Function to get the income amount of a Doctor object"""
+    #     return self._income
 
     def to_dict(self):
         output = dict()

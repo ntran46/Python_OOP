@@ -1,6 +1,9 @@
-from department import *
-from doctor import Doctor
-from patient import Patient
+from database.database import db
+from models.department import Department
+from models.abstract_person import Person
+from models.doctor import Doctor
+from models.patient import Patient
+
 
 
 def print_report(department):
