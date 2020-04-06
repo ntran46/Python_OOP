@@ -18,26 +18,26 @@ class MainAppController(tk.Frame):
         parent.title("Department Administration Tool")
         # Left frame, column 1
         left_frame = tk.Frame(master=self)
-        scrollbar = tk.Scrollbar(left_frame)
         left_frame.grid(row=1, column=1)
-        scrollbar.pack(side=RIGHT, fill=tk.Y)
+
         # Right frame (info text, column 2)
         right_frame = tk.Frame(master=self)
         right_frame.grid(row=1, column=2)
 
         # Listbox for people
         tk.Label(left_frame, text="People list:")
-        tk.Label.grid(row=1, column=1, columnspan=3)
+        tk.Label().grid(row=1, column=1, columnspan=3)
         self._people_list = tk.Listbox(left_frame, width=25, relief="solid")
-        # self._people_list.grid(row=2, column=1, columnspan=3)
+        self._people_list.grid(row=2, column=1, columnspan=3)
 
         # Call this on select
         self._people_list.bind("<<ListboxSelect>>", self._update_textbox)
 
         # Left frame widgets - using TTK
-        ttk.Button(left_frame, text="Add Student", command=self._add_patient).grid(row=3, column=1)
-        ttk.Button(left_frame, text="Add Teacher", command=self._add_doctor).grid(row=3, column=3, pady=5)
-        ttk.Button(left_frame, text="Remove Person", command=self._remove_popup).grid(row=4, column=1, pady=5, padx=5, columnspan=4)
+        ttk.Button(left_frame, text="Add Patient", command=self._add_patient).grid(row=3, column=1)
+        ttk.Button(left_frame, text="Add Doctor", command=self._add_doctor).grid(row=3, column=3, pady=5)
+        ttk.Button(left_frame, text="Remove Person", command=self._remove_popup)\
+            .grid(row=4, column=1, pady=5, padx=5, columnspan=4)
 
         # Right frame widgets
         tk.Label(right_frame, text="Person Info:").grid(row=1, column=1, columnspan=4)

@@ -1,90 +1,131 @@
 from accounting_stats import AccountingStats
 from doctor import Doctor
 from patient import Patient
-import json
+
+from database import db
+from peewee import Model, IntegerField, CharField
 
 """This is the Department class which contains information all doctors and patients"""
 
 
-class Department:
+class Department(Model):
     """Define a Department class"""
 
-    def __init__(self, name: str):
-        """Initialize a constructor of a Department instance"""
-        self.validation(name)
-        self._name = name
-        self._department = []
-        self._filepath = "people.json"
-        self.output = {"name": self._name, "Doctor": [], "Patient": []}
+    """Initialize a constructor of a Department instance"""
+    # self.validation(name)
+    name = CharField()
+    department = []
+    # output = {"name": name, "Doctor": [], "Patient": []}
 
-    def create_entities(self, person_list, person_type):
-        """Create entity from data loaded from file"""
-        for data in person_list:
-            datetime_object = data["date_of_birth"][0:-9]
-            if person_type == 'Patient':
-                person = Patient(data["first_name"], data["last_name"],
-                                 datetime_object, data["address"], data["id"],
-                                 data["is_released"], data["room_num"], data["bill"])
-                self._department.append(person)
-            elif person_type == 'Doctor':
-                person = Doctor(data["first_name"], data["last_name"],
-                                datetime_object, data["address"], data["id"],
-                                data["is_released"], data["office_num"], data["income"])
-                self._department.append(person)
+    class Meta:
+        database = db
 
-    def add_person(self, person: object):
+    # it works
+    def update_entities(self):
+        """Create entity from data loaded from database"""
+        doctor_list = Doctor.select()
+        patient_list = Patient.select()
+
+        for doctor in doctor_list:
+            data = dict()
+            data["id"] = doctor.person_id
+            data["first_name"] = doctor.firstName
+            data["last_name"] = doctor.lastName
+            data["date_of_birth"] = doctor.date_of_birth.strftime("%d-%b-%Y")
+            data["address"] = doctor.address
+            data["is_released"] = doctor.is_released
+            data["office_num"] = doctor.office_num
+            data["income"] = doctor.income
+            self.department.append(data)
+
+        for patient in patient_list:
+            data = dict()
+            data["id"] = patient.person_id
+            data["first_name"] = patient.firstName
+            data["last_name"] = patient.lastName
+            data["date_of_birth"] = patient.date_of_birth.strftime("%d-%b-%Y")
+            data["address"] = patient.address
+            data["is_released"] = patient.is_released
+            data["room_num"] = patient.room_num
+            data["bill"] = patient.bill
+            self.department.append(data)
+
+    # it works
+    def add_person(self, person: dict):
         """Function to add a person to a department list"""
-        person_id = person.get_id()
-        result = self.get_person_by_id(person_id)
-        if result is not None:
-            raise ValueError("This person is already added in the department list")
+        person.save()
+        self.department.append(person)
+
+    # it works
+    def remove_person_by_id(self, ID: str):
+        """Function to remove a person out of a department list and database"""
+        if not self.get_person_by_id(ID):
+            raise ValueError("Person not found")
         else:
-            self._department.append(person)
+            if ID[0:1] == 'D':
+                person = Doctor.select().where(Doctor.person_id == ID).get()
+                person.delete_instance()
+            if ID[0:1] == 'P':
+                person = Patient.select().where(Patient.person_id == ID).get()
+                person.delete_instance()
+            self.update_entities()
 
-    def remove_person_by_id(self, ID: int):
-        """Function to remove a person out of a department list"""
-        check = False
-        for obj in self._department:
-            if obj.get_id() == ID:
-                self._department.remove(obj)
-                check = True
-        if not check:
-            raise ValueError(f"The id {ID} does not exist.")
-
-    def get_person_by_id(self, ID: int):
+    # it works
+    def get_person_by_id(self, ID: str):
         """Function to get an ID of a person in the list"""
-        for obj in self._department:
-            if obj.get_id() == ID:
-                return obj
+        # try:
+        if ID[0:1] == 'D':
+            person = Doctor.select().where(Doctor.person_id == ID)
+            if person.exists():
+                return Doctor.select().where(Doctor.person_id == ID).get()
+            else:
+                return None
+        if ID[0:1] == 'P':
+            person = Patient.select().where(Patient.person_id == ID)
+            if person.exists():
+                return Patient.select().where(Patient.person_id == ID).get()
+            else:
+                return None
 
+    # I think it should work, since this does not touch db
     def get_person_by_type(self, person_type: str):
         """Function is to give a description all people with a given type"""
         person_type_list = []
         if type(person_type) is not str:
             raise TypeError("The type input is not a string")
 
-        for person in self._department:
+        for person in self.department:
             if person.get_type() == person_type:
                 person_type_list.append(person.to_dict())
                 person.get_description()
         return person_type_list
 
+    # it works
     def get_all_current_people(self):
         """Function is return all people in a department"""
-        for person in self._department:
-            person.get_description()
+        for person in self.department:
+            print(person)
 
-    def person_exist(self, ID: int):
+    # it works
+    def person_exist(self, ID: str):
         """Function to check if a person belongs to the department"""
-        for obj in self._department:
-            if obj.get_id() == ID:
+        if ID[0:1] == 'D':
+            person = Doctor.select().where(Doctor.person_id == ID)
+            if person.exists():
+                return True
+            else:
+                return False
+        if ID[0:1] == 'P':
+            person = Patient.select().where(Patient.person_id == ID)
+            if person.exists():
                 return True
             else:
                 return False
 
+    # it works
     def get_name(self):
         """Function to get name of a department"""
-        return self._name
+        return self.name
 
     def get_statistics(self):
         """Function to get statistics information from all patients"""
@@ -92,7 +133,7 @@ class Department:
         _remaining_num = 0
         _total_bill_released_patients = 0
 
-        for obj in self._department:
+        for obj in self.department:
             if obj.get_type() == 'Patient':
                 if obj.is_released():
                     _released_num += 1
@@ -104,10 +145,10 @@ class Department:
     def to_dict(self):
         """ Return department instance state as dictionary """
         output = dict()
-        output["name"] = self._name
+        output["name"] = self.name
         output["Patient"] = list()
         output["Doctor"] = list()
-        for person in self._department:
+        for person in self.department:
             if person.get_type() == 'Patient':
                 output["Patient"].append(person.to_dict())
 
@@ -135,34 +176,29 @@ class Department:
             person.set_office_num(office_room_num)
             person.set_income(bill_income)
 
-    @staticmethod
-    def validation(name):
-        """ Validate input parameter"""
-        if not name:
-            raise ValueError("A department's name must be defined!")
-        if type(name) is not str:
-            raise TypeError("Name of the department should be a string.")
+    # @staticmethod
+    # def validation(name):
+    #     """ Validate input parameter"""
+    #     if not name:
+    #         raise ValueError("A department's name must be defined!")
+    #     if type(name) is not str:
+    #         raise TypeError("Name of the department should be a string.")
 
+# For testing
+if __name__ == "__main__":
+    """Main function"""
+    department = Department(name="Surrey")
+    department.update_entities()
+    # department.get_all_current_people()
+    department.get_person_by_id('D001')
+    # department.remove_person_by_id('D001')
+    # department.get_person_by_id('D001')
+    print(department.person_exist('D002'))
+    print(department.person_exist('D001'))
 
-    # def _read_from_file(self, filePath=""):
-    #     """Read content from a file as a JSON and create entities accordingly"""
-    #     if filePath == "":
-    #         filePath = self._filepath
-    #
-    #     with open(filePath) as file:
-    #         data = json.load(file)
-    #         for person1 in data["Doctor"]:
-    #             self.output["Doctor"].append(person1)
-    #         for person2 in data["Patient"]:
-    #             self.output["Patient"].append(person2)
-    #
-    #     self.create_entities(self.output["Patient"], "Patient")
-    #     self.create_entities(self.output["Doctor"], "Doctor")
-    #     return self.output
-
-    #
-    # def _write_to_file(self):
-    #     """Export the entities as a JSON serialized list in the file"""
-    #     temp = self.to_dict()
-    #     with open(self._filepath, "w") as file:
-    #         json.dump(temp, file, default=str)
+    # This line below will return a peewee error due to UNIQUE constraint on person_id
+    # when trying to save a record with the same person_id value
+    # doctor1 = Doctor(person_id='D001', firstName="Johnny", lastName="Kenedy", date_of_birth="1984-1-30",
+    #                  address="1444 Oakway, North Vancouver, Vancouver, BC", is_released=0, office_num=123,
+    #                  income=150000)
+    # doctor1.save()
