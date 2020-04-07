@@ -1,6 +1,5 @@
 from database import db
 from doctor import Doctor
-from abstract_person import Person
 from department import Department
 from patient import Patient
 

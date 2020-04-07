@@ -20,6 +20,10 @@ class Department(Model):
     class Meta:
         database = db
 
+    def __str__(self):
+        """ Print department information"""
+        return f"<Department: {self.name}>"
+
     # it works
     def update_entities(self):
         """Create entity from data loaded from database"""
@@ -51,10 +55,11 @@ class Department(Model):
             self.department.append(data)
 
     # it works
-    def add_person(self, person: dict):
+    def add_person(self, person: db):
         """Function to add a person to a department list"""
         person.save()
         self.department.append(person)
+        self.update_entities()
 
     # it works
     def remove_person_by_id(self, ID: str):
@@ -73,7 +78,6 @@ class Department(Model):
     # it works
     def get_person_by_id(self, ID: str):
         """Function to get an ID of a person in the list"""
-        # try:
         if ID[0:1] == 'D':
             person = Doctor.select().where(Doctor.person_id == ID)
             if person.exists():
@@ -127,6 +131,7 @@ class Department(Model):
         """Function to get name of a department"""
         return self.name
 
+    # it works
     def get_statistics(self):
         """Function to get statistics information from all patients"""
         _released_num = 0
@@ -134,14 +139,15 @@ class Department(Model):
         _total_bill_released_patients = 0
 
         for obj in self.department:
-            if obj.get_type() == 'Patient':
-                if obj.is_released():
+            if obj['id'][0:1] == 'P':
+                if obj['is_released'] == 'True':
                     _released_num += 1
-                    _total_bill_released_patients += obj.bill
+                    _total_bill_released_patients += obj['bill']
                 else:
                     _remaining_num += 1
         return AccountingStats(_released_num, _remaining_num, _total_bill_released_patients)
 
+    #it works
     def to_dict(self):
         """ Return department instance state as dictionary """
         output = dict()
@@ -149,32 +155,35 @@ class Department(Model):
         output["Patient"] = list()
         output["Doctor"] = list()
         for person in self.department:
-            if person.get_type() == 'Patient':
-                output["Patient"].append(person.to_dict())
+            if person['id'][0:1] == 'P':
+                output["Patient"].append(person)
 
-            elif person.get_type() == 'Doctor':
-                output["Doctor"].append(person.to_dict())
+            elif person['id'][0:1] == 'D':
+                output["Doctor"].append(person)
 
         return output
 
+    # it works
     def update_person(self, person_id, first_name, last_name, office_room_num, bill_income):
-        """ Updates name for the person <student_id>
+        """ Updates information for the person with person_id
             Raises Exception if the student does not exist (or values are not correct) """
 
         person = self.get_person_by_id(person_id)
         if not person:
             raise ValueError("Patient not in department")
 
+        person.firstName = first_name
+        person.lastName = last_name
+        person.room_number = office_room_num
+
         if person.get_type() == 'Patient':
-            person.set_first_name(first_name)
-            person.set_last_name(last_name)
-            person.set_room_num(office_room_num)
-            person.bill = bill_income
+            if bill_income > 0:
+                person.bill = bill_income
+                person.is_released = 'True'
         if person.get_type() == 'Doctor':
-            person.set_first_name(first_name)
-            person.set_last_name(last_name)
-            person.set_office_num(office_room_num)
-            person.set_income(bill_income)
+            person.income = bill_income
+        person.save()
+        self.update_entities()
 
     # @staticmethod
     # def validation(name):
@@ -184,10 +193,13 @@ class Department(Model):
     #     if type(name) is not str:
     #         raise TypeError("Name of the department should be a string.")
 
+
 # For testing
 if __name__ == "__main__":
     """Main function"""
+
     department = Department(name="Surrey")
+    print(department)
     department.update_entities()
     # department.get_all_current_people()
     department.get_person_by_id('D001')
@@ -195,6 +207,15 @@ if __name__ == "__main__":
     # department.get_person_by_id('D001')
     print(department.person_exist('D002'))
     print(department.person_exist('D001'))
+
+    # print(department.get_person_by_id('D001').to_dict())
+    # department.update_person('D001', 'Johnny', 'Kenedy', '320', 220000)
+    # print(department.get_person_by_id('D001').to_dict())
+    # print(department.get_person_by_id('P001').to_dict())
+    # department.update_person('P001', 'Jose', 'McDonald', '202', 22000)
+    # print(department.get_person_by_id('P001').to_dict())
+
+    print(department.to_dict())
 
     # This line below will return a peewee error due to UNIQUE constraint on person_id
     # when trying to save a record with the same person_id value

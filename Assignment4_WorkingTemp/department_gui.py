@@ -16,6 +16,7 @@ class MainAppController(tk.Frame):
         """ Initialize Main Application """
         tk.Frame.__init__(self, parent)
         parent.title("Department Administration Tool")
+        parent.geometry('640x400')
         # Left frame, column 1
         left_frame = tk.Frame(master=self)
         left_frame.grid(row=1, column=1)
@@ -25,8 +26,7 @@ class MainAppController(tk.Frame):
         right_frame.grid(row=1, column=2)
 
         # Listbox for people
-        tk.Label(left_frame, text="People list:")
-        tk.Label().grid(row=1, column=1, columnspan=3)
+        tk.Label(left_frame, text="People list:").grid(row=1, column=1, columnspan=3)
         self._people_list = tk.Listbox(left_frame, width=25, relief="solid")
         self._people_list.grid(row=2, column=1, columnspan=3)
 
@@ -41,7 +41,7 @@ class MainAppController(tk.Frame):
 
         # Right frame widgets
         tk.Label(right_frame, text="Person Info:").grid(row=1, column=1, columnspan=4)
-        self._info_text = tk.Text(master=right_frame, height=10, relief="solid",  width=40, font=("TkTextFont", 10))
+        self._info_text = tk.Text(master=right_frame, height=10, relief="solid",  width=60, font=("TkTextFont", 10))
         self._info_text.grid(row=2, column=1, columnspan=4, padx=15)
         self._info_text.tag_configure("bold", font=("TkTextFont", 10, "bold"))
         ttk.Button(right_frame, text="Released", command=self._released_cb).grid(row=3, column=2, pady=5)
@@ -62,11 +62,11 @@ class MainAppController(tk.Frame):
         # This is a list, so we take just the first item (could be multi select...)
         selected_values = self._people_list.curselection()
         selected_index = selected_values[0]
-        student_id = self._people_list.get(selected_index)
+        person_id = self._people_list.get(selected_index)
 
         # Make a GET request
-        r = requests.get("http://localhost:5000/department/person/" + student_id)
-        
+        r = requests.get("http://localhost:5000/department/person/" + person_id)
+
         # Clear the text box
         self._info_text.delete(1.0, tk.END)
         
@@ -158,17 +158,19 @@ class MainAppController(tk.Frame):
         """ Quit """
         self.quit()
 
-    # NEED to revised
+    # completed
     def _update_people_list(self):
         """ Update the List of People """
-        r = requests.get("http://localhost:5000/school")
+        r = requests.get("http://localhost:5000/department/person/all")
         self._people_list.delete(0, tk.END)
-        for s in r.json()["people"]:
-            self._people_list.insert(tk.END, s['student_id'])
-            if s['type'] == "teacher":
-                self._people_list.itemconfig(tk.END, {'fg': 'blue'})
-            if s['quarantine']:
-                self._people_list.itemconfig(tk.END, {'bg': 'red'})
+        for s in r.json()["Doctor"]:
+            self._people_list.insert(tk.END, s['id'])
+            self._people_list.itemconfig(tk.END, {'fg': 'blue'})
+        for s in r.json()["Patient"]:
+            self._people_list.insert(tk.END, s['id'])
+            self._people_list.itemconfig(tk.END, {'fg': 'red'})
+            if s['is_released'] == 'True':
+                self._people_list.itemconfig(tk.END, {'bg': 'green'})
 
     # NEED to revised
     def _get_person_id(self):

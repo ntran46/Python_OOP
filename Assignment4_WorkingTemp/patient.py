@@ -30,14 +30,14 @@ class Patient(Person):
 
     def to_dict(self):
         output = dict()
-        output["first_name"] = self._firstName
-        output["last_name"] = self._lastName
-        output["date_of_birth"] = self._date_of_birth
-        output["address"] = self._address
-        output["is_released"] = self._is_released
-        output["id"] = self._id
-        output["room_num"] = self._room_num
-        output["bill"] = self._bill
+        output["first_name"] = self.firstName
+        output["last_name"] = self.lastName
+        output["date_of_birth"] = self.date_of_birth
+        output["address"] = self.address
+        output["is_released"] = self.is_released
+        output["id"] = self.person_id
+        output["room_num"] = self.room_num
+        output["bill"] = self.bill
         return output
 
     # @classmethod

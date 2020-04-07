@@ -24,11 +24,11 @@ class Doctor(Person):
 
     def to_dict(self):
         output = dict()
-        output["first_name"] = self.first_name
-        output["last_name"] = self.last_name
+        output["first_name"] = self.firstName
+        output["last_name"] = self.lastName
         output["date_of_birth"] = self.date_of_birth
         output["address"] = self.address
-        output["id"] = self.id
+        output["id"] = self.person_id
         output["is_released"] = self.is_released
         output["office_num"] = self.office_num
         output["income"] = self.income

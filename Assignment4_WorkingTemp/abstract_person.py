@@ -11,9 +11,7 @@ class Person(Model):
     lastName = CharField()
     date_of_birth = DateField()
     address = CharField()
-
-    # Boolean value 0 (false) and 1 (true).
-    is_released = IntegerField(default=0)
+    is_released = CharField(default=False)
 
     class Meta:
         """Declare the database variable"""

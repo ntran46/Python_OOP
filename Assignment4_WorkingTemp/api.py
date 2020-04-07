@@ -10,8 +10,8 @@ PATIENT_ID_REGEXP = r"^P\d+$"
 DOCTOR_ID_REGEXP = r"^D\d+$"
 
 app = Flask(__name__)
-department = Department("Surgery")
-
+department = Department(name="Surgery")
+department.update_entities()
 
 @app.route("/department/<person_type>", methods=["POST"])
 def add_person(person_type):
@@ -47,7 +47,7 @@ def add_person(person_type):
 # ==>> Need to catch error which says UNIQUE constraint in person_id
 
 
-
+# it works
 @app.route("/department/person/all", methods=["GET"])
 def list_persons():
     return make_response(jsonify(department.to_dict()), 200)
@@ -56,13 +56,14 @@ def list_persons():
 @app.route("/department/persons/all/<person_type>", methods=["GET"])
 def get_book_by_type(person_type):
     person = department.get_person_by_type(person_type)
+
     if not person:
         return make_response("Person Not Found.", 400)
 
     return make_response(jsonify(department.get_person_by_type(person_type)), 200)
 
-
-@app.route("/department/person/<int:person_id>", methods=["GET"])
+# it works
+@app.route("/department/person/<string:person_id>", methods=["GET"])
 def get_person(person_id):
     person = department.get_person_by_id(person_id)
     if not person:
