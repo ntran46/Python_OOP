@@ -1,8 +1,6 @@
-from database import db
-from department import Department
-from abstract_person import Person
-from doctor import Doctor
-from patient import Patient
+from Model.department import Department
+from Model.doctor import Doctor
+from Model.patient import Patient
 
 
 
