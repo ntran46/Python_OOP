@@ -1,21 +1,17 @@
-from department import Department
-from doctor import Doctor
-from patient import Patient
+from Model.department import Department
+from Model.doctor import Doctor
+from Model.patient import Patient
 from database import db
 
 """This is to connect to database and create 3 tables"""
-db.create_tables([Department])
-db.create_tables([Patient])
-db.create_tables([Doctor])
+db.create_tables([Department, Doctor, Patient])
 
 
 # Create initial data
-Surrey = Department(name="Surrey")
-Surrey.save()
 
 doctor1 = Doctor(person_id='D001', firstName="Johnny", lastName="Kenedy", date_of_birth="1984-1-30",
                  address="1444 Oakway, North Vancouver, Vancouver, BC", is_released=False, office_num=123,
-                 income=150000)
+                 income=10000)
 doctor1.save()
 doctor2 = Doctor(person_id='D002', firstName="George", lastName="Bush", date_of_birth="1982-2-28",
                  address="97334 Oak Bridge , Vancouver, Vancouver, BC", is_released=False, office_num=125,

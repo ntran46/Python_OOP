@@ -1,9 +1,9 @@
-from accounting_stats import AccountingStats
-from doctor import Doctor
-from patient import Patient
+from Model.accounting_stats import AccountingStats
+from Model.doctor import Doctor
+from Model.patient import Patient
 
 from database import db
-from peewee import Model, IntegerField, CharField
+from peewee import Model, CharField
 
 """This is the Department class which contains information all doctors and patients"""
 
@@ -12,10 +12,8 @@ class Department(Model):
     """Define a Department class"""
 
     """Initialize a constructor of a Department instance"""
-    # self.validation(name)
     name = CharField()
     department = []
-    # output = {"name": name, "Doctor": [], "Patient": []}
 
     class Meta:
         database = db
@@ -24,9 +22,9 @@ class Department(Model):
         """ Print department information"""
         return f"<Department: {self.name}>"
 
-    # it works
     def update_entities(self):
         """Create entity from data loaded from database"""
+        self.department = []
         doctor_list = Doctor.select()
         patient_list = Patient.select()
 
@@ -54,14 +52,11 @@ class Department(Model):
             data["bill"] = patient.bill
             self.department.append(data)
 
-    # it works
     def add_person(self, person: db):
         """Function to add a person to a department list"""
         person.save()
-        self.department.append(person)
-        self.update_entities()
+        self.department.append(person.to_dict())
 
-    # it works
     def remove_person_by_id(self, ID: str):
         """Function to remove a person out of a department list and database"""
         if not self.get_person_by_id(ID):
@@ -75,23 +70,23 @@ class Department(Model):
                 person.delete_instance()
             self.update_entities()
 
-    # it works
     def get_person_by_id(self, ID: str):
         """Function to get an ID of a person in the list"""
-        if ID[0:1] == 'D':
+        if type(ID) != str:
+            return None
+        elif ID[0:1] == 'D':
             person = Doctor.select().where(Doctor.person_id == ID)
             if person.exists():
                 return Doctor.select().where(Doctor.person_id == ID).get()
             else:
                 return None
-        if ID[0:1] == 'P':
+        elif ID[0:1] == 'P':
             person = Patient.select().where(Patient.person_id == ID)
             if person.exists():
                 return Patient.select().where(Patient.person_id == ID).get()
             else:
                 return None
 
-    # I think it should work, since this does not touch db
     def get_person_by_type(self, person_type: str):
         """Function is to give a description all people with a given type"""
         person_type_list = []
@@ -99,18 +94,15 @@ class Department(Model):
             raise TypeError("The type input is not a string")
 
         for person in self.department:
-            if person.get_type() == person_type:
-                person_type_list.append(person.to_dict())
-                person.get_description()
+            if person['id'][0:1] == person_type[0:1]:
+                person_type_list.append(person)
         return person_type_list
 
-    # it works
     def get_all_current_people(self):
         """Function is return all people in a department"""
         for person in self.department:
             print(person)
 
-    # it works
     def person_exist(self, ID: str):
         """Function to check if a person belongs to the department"""
         if ID[0:1] == 'D':
@@ -126,12 +118,10 @@ class Department(Model):
             else:
                 return False
 
-    # it works
     def get_name(self):
         """Function to get name of a department"""
         return self.name
 
-    # it works
     def get_statistics(self):
         """Function to get statistics information from all patients"""
         _released_num = 0
@@ -147,7 +137,6 @@ class Department(Model):
                     _remaining_num += 1
         return AccountingStats(_released_num, _remaining_num, _total_bill_released_patients)
 
-    #it works
     def to_dict(self):
         """ Return department instance state as dictionary """
         output = dict()
@@ -163,63 +152,38 @@ class Department(Model):
 
         return output
 
-    # it works
-    def update_person(self, person_id, first_name, last_name, office_room_num, bill_income):
+    def update_person(self, person_id, first_name, last_name, office_room_num, bill_income, address):
         """ Updates information for the person with person_id
             Raises Exception if the student does not exist (or values are not correct) """
 
         person = self.get_person_by_id(person_id)
         if not person:
-            raise ValueError("Patient not in department")
+            raise ValueError("Person not in department")
 
         person.firstName = first_name
         person.lastName = last_name
-        person.room_number = office_room_num
+        person.address = address
 
         if person.get_type() == 'Patient':
+            person.room_num = office_room_num
             if bill_income > 0:
                 person.bill = bill_income
                 person.is_released = 'True'
+            elif bill_income == 0:
+                person.bill = 0
+                person.is_released = 'False'
         if person.get_type() == 'Doctor':
+            person.office_num = office_room_num
             person.income = bill_income
         person.save()
         self.update_entities()
 
-    # @staticmethod
-    # def validation(name):
-    #     """ Validate input parameter"""
-    #     if not name:
-    #         raise ValueError("A department's name must be defined!")
-    #     if type(name) is not str:
-    #         raise TypeError("Name of the department should be a string.")
-
-
-# For testing
-if __name__ == "__main__":
-    """Main function"""
-
-    department = Department(name="Surrey")
-    print(department)
-    department.update_entities()
-    # department.get_all_current_people()
-    department.get_person_by_id('D001')
-    # department.remove_person_by_id('D001')
-    # department.get_person_by_id('D001')
-    print(department.person_exist('D002'))
-    print(department.person_exist('D001'))
-
-    # print(department.get_person_by_id('D001').to_dict())
-    # department.update_person('D001', 'Johnny', 'Kenedy', '320', 220000)
-    # print(department.get_person_by_id('D001').to_dict())
-    # print(department.get_person_by_id('P001').to_dict())
-    # department.update_person('P001', 'Jose', 'McDonald', '202', 22000)
-    # print(department.get_person_by_id('P001').to_dict())
-
-    print(department.to_dict())
-
-    # This line below will return a peewee error due to UNIQUE constraint on person_id
-    # when trying to save a record with the same person_id value
-    # doctor1 = Doctor(person_id='D001', firstName="Johnny", lastName="Kenedy", date_of_birth="1984-1-30",
-    #                  address="1444 Oakway, North Vancouver, Vancouver, BC", is_released=0, office_num=123,
-    #                  income=150000)
-    # doctor1.save()
+    # def save(self, *args, **kwargs):
+    #     """ Validate input value before saving data """
+    #     if not self.income or type(self.income) != int or self.income < 0:
+    #         raise ValueError("Invalid value! Income must be greater than or equal 0, and income is an integer")
+    #     elif not self.office_num or type(self.office_num) != int or self.office_num <= 0:
+    #         raise ValueError("Invalid value! Office number must be greater than 0, and office number is an integer")
+    #     elif not re.match(ID_REGEXP, self.person_id):
+    #         raise ValueError(f"Invalid ID {self.person_id}")
+    #     return super(Doctor, self).save(*args, **kwargs)

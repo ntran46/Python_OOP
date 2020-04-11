@@ -2,6 +2,7 @@ import requests
 import tkinter as tk
 from tkinter import ttk, messagebox
 import re
+from tkcalendar import DateEntry
 
 
 class AddDoctorPopup(tk.Frame):
@@ -9,7 +10,7 @@ class AddDoctorPopup(tk.Frame):
 
     def __init__(self, parent, close_callback):
         """ Constructor """
-
+        self.is_released = False
         tk.Frame.__init__(self, parent)
         parent.title("Add a Doctor")
         self._close_cb = close_callback
@@ -24,15 +25,12 @@ class AddDoctorPopup(tk.Frame):
         ttk.Label(self, text="Last Name:").grid(row=3, column=1)
         self.last_name = ttk.Entry(self)
         self.last_name.grid(row=3, column=2)
-        ttk.Label(self, text="Date of Birth:").grid(row=4, column=1)
-        self.date_of_birth = ttk.Entry(self)
-        self.date_of_birth.grid(row=4, column=2)
+
         ttk.Label(self, text="Address:").grid(row=5, column=1)
         self.address = ttk.Entry(self)
+        ttk.Label(self, text="Date of Birth:").grid(row=4, column=1)
+        ttk.Button(self, text="Calendar", command=self._date_of_birth).grid(row=4, column=2)
         self.address.grid(row=5, column=2)
-        ttk.Label(self, text="Is released:").grid(row=6, column=1)
-        self.is_released = ttk.Entry(self)
-        self.is_released.grid(row=6, column=2)
         ttk.Label(self, text="Office Number:").grid(row=7, column=1)
         self.office_num = ttk.Entry(self)
         self.office_num.grid(row=7, column=2)
@@ -43,17 +41,29 @@ class AddDoctorPopup(tk.Frame):
         ttk.Button(self, text="Submit", command=self._submit_cb).grid(row=9, column=1, pady=20)
         ttk.Button(self, text="Close", command=self._close_cb).grid(row=9, column=2)
 
+    def _date_of_birth(self):
+        """ Calendar popup """
+        new_wins = tk.Toplevel()
+        cal = DateEntry(new_wins, width=15, background="blue", foreground="red",
+                        borderwidth=3, date_pattern='y-mm-dd')
+        cal.pack(padx=10, pady=10)
+        self.date_of_birth = cal.get_date()
+
     def _submit_cb(self):
         """ Submit the Add Doctor button """
         data = {}
         data["first_name"] = self.first_name.get()
         data["last_name"] = self.last_name.get()
-        data["date_of_birth"] = self.date_of_birth.get()
+        data["date_of_birth"] = self.date_of_birth.strftime("%d-%b-%Y")
         data["address"] = self.address.get()
-        # data["id"] = self.id.get()
-        data["is_released"] = self.is_released.get()
-        data["office_num"] = self.office_num.get()
-        data["income"] = self.income.get()
+        data["id"] = self.id.get()
+        data["is_released"] = self.is_released
+        try:
+            data["office_num"] = int(self.office_num.get())
+            data["income"] = int(self.income.get())
+        except TypeError:
+            messagebox.showerror("Error", "Office number or Income must be greater than or equal 0,"
+                                          " and they are an integer", icon="error")
 
         # regex = re.compile('^[0-9]', re.I)
         # match = regex.match(str(data['id']))
@@ -65,17 +75,11 @@ class AddDoctorPopup(tk.Frame):
         match_2 = regex_2.match(str(data['last_name']))
 
         try:
-            # if bool(match) and bool(match_1) and bool(match_2):
             response = requests.post("http://127.0.0.1:5000/department/Doctor", json=data)
-            print(response.status_code)
-            print(response.text)  # test
 
             if response.status_code == 200:
                 print(response.text)
             else:
                 messagebox.showerror("Error", response.text)
         except ValueError as err:
-            # else:
-            """Either of them in below is all good"""
             messagebox.showerror(title="Invalid Value", message=err, icon="error")
-            messagebox.showerror("Error", "Wrong Entry. Please try again!")

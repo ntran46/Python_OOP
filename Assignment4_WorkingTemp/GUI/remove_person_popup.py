@@ -7,7 +7,7 @@ import re
 class RemovePersonPopup(tk.Frame):
     """ Popup Frame to remove a person """
 
-    PERSON_ID_REGEXP = r"^\d+$"
+    ID_REGEXP = r"(^D|^P)\d+$"
 
     def __init__(self, parent, close_callback):
         """ Constructor """
@@ -33,41 +33,28 @@ class RemovePersonPopup(tk.Frame):
         else:
             messagebox.showerror(title="API Call Error", message=response.content, icon="error")
 
-    # def _remove_cb(self):
-    #     """ Submit the Add Student """
-    #     student_id = self._student_id.get()
-    #
-    #     regex = re.compile('^[A-Z][0-9]', re.I)
-    #     match = regex.match(str(student_id))
-    #
-    #     if bool(match):
-    #         response = requests.delete("http://127.0.0.1:5000/school/person/" + str(student_id))
-    #         # print(response.status_code)
-    #
-    #         if response.status_code == 200:
-    #             print(response.text)
-    #             messagebox.showinfo("Confirm", "Person was deleted successfully!")
-    #             self._close_cb()
-    #         else:
-    #             messagebox.showerror("Error", response.text)
-    #     else:
-    #         messagebox.showerror("Error", "Wrong Entry. Please try again!")
-
     def _confirm_popup(self):
         """ Show confirmation message """
-        if not re.match(self.PERSON_ID_REGEXP, self._person_id.get()):
-            messagebox.showinfo(title="Invalid Value", message="Invalid Person ID" + self._person_id.get())
+        if not re.match(self.ID_REGEXP, self._person_id.get()):
+            messagebox.showinfo(title="Invalid Value", message="Invalid Person ID: " + self._person_id.get())
         else:
             data = self._get_id()
-            message = f"Do you want to remove this {data['type']}? \n\n" \
-                      f" Name: {data['name']} \n" \
-                      f" Person ID: {data['person_id']}\n" \
+            if self._person_id.get()[0:1] == 'P':
+                _type = "Patient"
+            else:
+                _type = "Doctor"
+            message = f"Do you want to remove this {_type}? \n\n" \
+                      f" Name: {data['first_name']} {data['last_name']} \n" \
+                      f" Person ID: {data['id']}\n" \
+                      f" Date of Birth: {data['date_of_birth']}\n" \
+                      f" Address: {data['address']}" \
                       f"\n\n Caution: This action could not be undone "
             MsgBox = tk.messagebox.askquestion('Confirm Action', message,
                                                icon='warning')
             if MsgBox == 'yes':
                 self._remove_person()
-                messagebox.showinfo("Confirmation", "Person was deleted successfully!")
+                messagebox.showinfo("Confirmation", f"Person record (ID: {data['id']})"
+                                                    f" has been removed successfully.", icon="info")
 
     def _get_id(self):
         """ Get information of selected person"""

@@ -1,7 +1,7 @@
 from database import db
-from doctor import Doctor
-from department import Department
-from patient import Patient
+from Model.doctor import Doctor
+from Model.department import Department
+from Model.patient import Patient
 
 """This is to connect to database and drop tables"""
 
