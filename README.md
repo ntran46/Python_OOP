@@ -1,6 +1,6 @@
 # Python_OOP
 
-This is a Python project for the course ACIT2515 to practice:  
+This is a Python project to practice:  
    * the OOP model: Abstraction, Encapsulation, Polymorphism, Inheritance  
    * Object Relational Mapping with SQLite and peewee  
    * GUI design with Tkinter  
